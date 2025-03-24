@@ -1,5 +1,5 @@
 import Header from "./components/Header";
-import CreatorList from "./components/CreatorList";
+import DrinkCard from "./components/CreatorList";
 import Footer from "./components/Footer";
 
 export default function Home() {
@@ -11,7 +11,7 @@ export default function Home() {
   return (
     <div>
       <Header />
-      <CreatorList />
+      <DrinkCard />
       <Footer />
     </div>
   );
