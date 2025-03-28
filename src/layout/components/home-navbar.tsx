@@ -81,7 +81,7 @@ export const HomeNavbar = () => {
         <HomeNavbarLogo />
       </div>
 
-      <div className="flex items-center gap-4 sm:gap-6">
+      <div className="flex items-center gap-4 sm:gap-6 group">
         <SearchIcon className="size-5 sm:size-6 text-white cursor-pointer" />
 
         {/* Desktop Navigation */}
@@ -100,7 +100,7 @@ export const HomeNavbar = () => {
         {/* Menu Button - Mobile & Desktop */}
         <button
           onClick={() => setIsMenuOpen((prev) => !prev)}
-          className="flex items-center gap-2 bg-white rounded-full z-50"
+          className="flex items-center gap-2 bg-white rounded-full z-50 cursor-pointer"
         >
           {/* Mobile version - Icon only */}
           <div className="md:hidden p-2">
@@ -135,7 +135,7 @@ export const HomeNavbar = () => {
                     <li key={item.label}>
                       <Link
                         href={item.href}
-                        className="inline-flex items-center gap-2 border-2 border-black rounded-full font-medium px-4 py-2 md:px-6 hover:bg-black hover:text-white transition-colors"
+                        className="inline-flex items-center gap-2 border-2 border-black rounded-full font-medium px-4 py-2 md:px-6 transition cursor-pointer hover:invert"
                       >
                         <CircleAnimated />
                         {item.label}
