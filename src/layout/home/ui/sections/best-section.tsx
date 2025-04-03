@@ -413,7 +413,7 @@ export function BestSection() {
       <div className="mx-auto flex w-full max-w-screen-lg flex-col items-center space-y-8">
         <div className="text-center">
           <GradientHeading variant="secondary">
-            The best are already here
+            Les meilleurs sont déjà présent
           </GradientHeading>
           <a href="https://www.newcult.co" target="_blank">
             <GradientHeading size="xxl">

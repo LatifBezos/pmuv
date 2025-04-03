@@ -5,16 +5,17 @@ import { Footer } from "@/layout/components/footer";
 import { FeaturesSection } from "@/layout/home/ui/sections/features-section";
 import { CreatorsSection } from "@/layout/home/ui/sections/creators-section";
 import { ProjectsSection } from "@/layout/home/ui/sections/projects-section";
+
+
 export default function Home() {
   return (
-    <main className="flex flex-col items-center justify-center px-4">
+    <main className="flex flex-col items-center justify-center ">
       <HomeNavbar />
       <HeroSection />
       <FeaturesSection />
       <CreatorsSection />
       <ProjectsSection />
       <BestSection />
-
       <Footer />
     </main>
   );

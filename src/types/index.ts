@@ -17,6 +17,8 @@ export interface Creators {
     slug : string,
     kyc_status : string,
     created_at : string,
+    image_url : string,
+    color : string
 }
 
 export interface WalletTransactions {
