@@ -12,58 +12,38 @@ import { Button } from "@/components/ui/button";
 
 const navbarItems = [
   {
-    label: "Shows",
+    label: "Createurs",
     href: "/shows",
   },
   {
-    label: "Artists",
+    label: "Events",
     href: "/artists",
   },
   {
-    label: "News",
+    label: "Projets",
     href: "/news",
-  },
-  {
-    label: "Shop",
-    href: "/shop",
-  },
+  }
 ];
 
 const menuItems = [
   {
-    label: "Radio",
+    label: "Créateurs",
     href: "/radio",
   },
   {
-    label: "Shows",
+    label: "Events",
     href: "/shows",
   },
   {
-    label: "News",
-    href: "/news",
-  },
-  {
-    label: "Shop",
+    label: "Projects",
     href: "/shop",
   },
   {
-    label: "Support",
-    href: "/support",
-  },
-  {
-    label: "About",
+    label: "S'inscrire",
     href: "/about",
   },
   {
-    label: "Newsletter",
-    href: "/newsletter",
-  },
-  {
-    label: "Apply",
-    href: "/apply",
-  },
-  {
-    label: "Partners",
+    label: "Se connecter",
     href: "/partners",
   },
 ];
@@ -122,7 +102,7 @@ export const HomeNavbar = () => {
       <AnimatePresence initial={false}>
         {isMenuOpen && (
           <motion.div
-            className="fixed inset-0 bg-yellow-300 z-40 md:h-1/2"
+            className="fixed inset-0 bg-blue-300 z-40 md:h-2/3"
             initial={{ opacity: 0, y: -100 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -100 }}
@@ -145,9 +125,8 @@ export const HomeNavbar = () => {
                 </ul>
               </nav>
               <p className="font-serif text-xl md:text-3xl text-center max-w-4xl mx-auto">
-                Oroko is a not-for-profit independent internet radio station
-                based in Accra, Ghana. We aim to connect, inspire and empower
-                through conversation, collaboration and community.
+              Paye moi un verre est une plateforme de financement participatif adaptée à l'Afrique, 
+              permettant aux créateurs, entrepreneurs et particuliers de recevoir un soutien financier direct. 
               </p>
             </div>
           </motion.div>

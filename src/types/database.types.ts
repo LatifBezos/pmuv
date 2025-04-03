@@ -12,8 +12,10 @@ export type Database = {
       creators: {
         Row: {
           bio: string | null
+          color: string | null
           created_at: string | null
           id: string
+          image_url: string | null
           kyc_status: string | null
           slug: string
           social_links: Json | null
@@ -21,8 +23,10 @@ export type Database = {
         }
         Insert: {
           bio?: string | null
+          color?: string | null
           created_at?: string | null
           id?: string
+          image_url?: string | null
           kyc_status?: string | null
           slug: string
           social_links?: Json | null
@@ -30,8 +34,10 @@ export type Database = {
         }
         Update: {
           bio?: string | null
+          color?: string | null
           created_at?: string | null
           id?: string
+          image_url?: string | null
           kyc_status?: string | null
           slug?: string
           social_links?: Json | null
