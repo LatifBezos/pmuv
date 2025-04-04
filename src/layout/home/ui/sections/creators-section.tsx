@@ -34,15 +34,17 @@ export function CreatorsSection() {
   return (
     <div className="w-full px-4 py-2">
       <div className="container mx-auto">
-        <h1 className="text-4xl font-bold mb-10">Nos créateurs</h1>
-
+        <div className="flex items-center justify-between">
+        <h1 className="text-4xl font-bold mb-5">Nos créateurs</h1>
+        <h1 className="text-4xl font-bold mb-5">Tout voir</h1>
+        </div>
         {/* Carousel */}
         <Carousel className="mt-10">
           <CarouselContent>
             {creators.map((_, index) => (
               <CarouselItem key={index} className="basis-1/4">
-                <Link href={`/${_.slug}`} className="block relative">
-                  <div className="relative w-full h-64">
+                <Link href={`/${_.slug}`} className="block relative ">
+                  <div className="relative w-full h-64 ">
                     <img
                       src={`${_.image_url}`}
                       alt="Creator"

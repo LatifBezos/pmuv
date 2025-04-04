@@ -7,26 +7,26 @@ import { BeerIcon, Facebook, Instagram, Linkedin, Twitter } from "lucide-react";
 
 function Footer() {
   return (
-    <footer className="bg-background py-12">
+    <footer className="bg-background bg-black w-full  py-12">
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex flex-col items-center">
-          <div className="mb-8 rounded-full bg-primary/10 p-8">
-            <BeerIcon className="size-10 rotate-12 transition-all duration-200" />
+          <div className="mb-8 rounded-full bg-white/10 p-8">
+            <BeerIcon className="size-10 text-white rotate-12 transition-all duration-200" />
           </div>
           <nav className="mb-8 flex flex-wrap justify-center gap-6">
-            <Link href="#" className="hover:text-primary">
+            <Link href="#" className="text-white">
               Accueil
             </Link>
-            <Link href="#" className="hover:text-primary">
+            <Link href="#" className="text-white">
               Comment ça marche ?
             </Link>
-            <Link href="#" className="hover:text-primary">
+            <Link href="#" className="text-white">
               Nos projets
             </Link>
-            <Link href="#" className="hover:text-primary">
+            <Link href="#" className="text-white">
               Contact
             </Link>
-            <Link href="#" className="hover:text-primary">
+            <Link href="#" className="text-white">
               Contact
             </Link>
           </nav>

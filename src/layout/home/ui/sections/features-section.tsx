@@ -5,7 +5,12 @@ function FeaturesSection() {
     <div className="w-full py-20 lg:py-40">
       <div className="container mx-auto">
         <div className="flex flex-col-reverse lg:flex-row gap-10 lg:items-center">
-          <div className="bg-muted rounded-md w-full aspect-video h-full flex-1"></div>
+          <div className="flex gap-4 pl-0 lg:pl-20 flex-col  flex-1">
+            <img
+              src="/card.png"
+              alt="Features"
+            />
+          </div>
           <div className="flex gap-4 pl-0 lg:pl-20 flex-col  flex-1">
             <div>
               <Badge>Platform</Badge>
