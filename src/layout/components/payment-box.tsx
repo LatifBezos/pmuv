@@ -17,7 +17,7 @@ const PaymentBox = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl border text-center text-black">
+    <div className="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-xl border text-center text-black mt-10">
       <h2 className="text-3xl font-bold mb-6">Offrir un verre</h2>
 
       {/* Offres prédéfinies */}

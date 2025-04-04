@@ -13,7 +13,7 @@ import { Button } from "@/components/ui/button";
 const navbarItems = [
   {
     label: "Createurs",
-    href: "/shows",
+    href: "/creators",
   },
   {
     label: "Events",
@@ -28,7 +28,7 @@ const navbarItems = [
 const menuItems = [
   {
     label: "Créateurs",
-    href: "/radio",
+    href: "/creators",
   },
   {
     label: "Events",
@@ -62,7 +62,11 @@ export const HomeNavbar = () => {
       </div>
 
       <div className="flex items-center gap-4 sm:gap-6 group">
-        <SearchIcon className="size-5 sm:size-6 text-white cursor-pointer" />
+        <Link
+          href="/search"
+        >
+          <SearchIcon className="size-5 sm:size-6 text-white cursor-pointer" />
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-4">

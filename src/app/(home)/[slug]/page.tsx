@@ -33,7 +33,6 @@ const CreatorPage = () => {
       <HomeNavbar />
       {creator ? (
         <div>
-          <CreatorBio bio={creator.bio} color={creator.color} />
           <CreatorSection creator={creator} />
         </div>
       ) : (
