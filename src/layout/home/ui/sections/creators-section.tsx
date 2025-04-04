@@ -43,15 +43,15 @@ export function CreatorsSection() {
           <CarouselContent>
             {creators.map((_, index) => (
               <CarouselItem key={index} className="basis-1/4">
-                <Link href={`/${_.slug}`} className="block relative ">
-                  <div className="relative w-full h-64 ">
+                <Link href={`/${_.slug}`} className="block relative group">
+                  <div className="relative w-full h-64 rounded-lg overflow-hidden shadow-md">
                     <img
                       src={`${_.image_url}`}
                       alt="Creator"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    <div className="w-full h-full absolute top-0 left-0 flex justify-center items-center bg-black/20">
-                      <BeerIcon className="size-8 text-white rotate-12 transition-all duration-200" />
+                    <div className="absolute inset-0 flex flex-col justify-center items-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <BeerIcon className="size-8 text-white rotate-12 mb-2" />
                       <p className="text-2xl text-white font-bold">{_.slug}</p>
                     </div>
                   </div>
