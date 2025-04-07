@@ -25,9 +25,9 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { NavMonetize } from "@/layout/dashboard/ui/sections/nav-monetize";
-import { NavSettings } from "@/layout/dashboard/ui/sections/nav-settings";
-import { NavMain } from "./nav-main";
+import { NavMonetize } from "@/layout/dashboard/ui/sections/sidebar/nav-monetize";
+import { NavSettings } from "@/layout/dashboard/ui/sections/sidebar/nav-settings";
+import { NavMain } from "@/layout/dashboard/ui/sections/sidebar/nav-main";
 
 // This is sample data.
 const data = {

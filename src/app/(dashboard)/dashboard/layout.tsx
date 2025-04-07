@@ -1,37 +1,29 @@
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
-import { DashboardSidebar } from "@/layout/dashboard/ui/sections/dashboard-sidebar";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // TODO: Check if user is authenticated
-
   return (
-    <SidebarProvider>
-      <DashboardSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
-          </div>
-        </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
-      </SidebarInset>
-    </SidebarProvider>
+    <div className="flex flex-col gap-4 bg-slate-100 flex-1 items-center">
+      {/* TODO: Check if the creator has set up his payment account */}
+      {true && (
+        <div className="w-full p-4 flex items-center justify-center space-x-4 bg-orange-100">
+          <p className="text-sm font-bold">
+            Please link your payout method to start receiving payments.
+          </p>
+          <Link href="/dashboard/settings">
+            <Button className="rounded-full font-bold cursor-pointer">
+              Complete setup
+            </Button>
+          </Link>
+        </div>
+      )}
+      <div className="flex flex-1 flex-col gap-4 p-4 pt-0 min-w-4xl">
+        {children}
+      </div>
+    </div>
   );
 }
