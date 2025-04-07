@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Badge } from "@/components/ui/badge";
 import {
   Carousel,
@@ -6,12 +6,11 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Link from "next/link";
-import {createClient} from '@supabase/supabase-js';
-import {getCreators} from "@/utils/supabase/queries";
+import { createClient } from "@supabase/supabase-js";
+import { getCreators } from "@/utils/supabase/queries";
 import { Creators } from "@/types";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import { BeerIcon } from "lucide-react";
-
 
 export function CreatorsSection() {
   const [creators, setCreators] = useState<Creators[] | null>(null);
@@ -30,20 +29,22 @@ export function CreatorsSection() {
 
   console.log("creators", creators);
 
-
   return (
     <div className="w-full px-4 py-2">
       <div className="container mx-auto">
         <div className="flex items-center justify-between">
-        <h1 className="text-4xl font-bold mb-5">Nos créateurs</h1>
-        <h1 className="text-4xl font-bold mb-5">Tout voir</h1>
+          <h1 className="text-4xl font-bold mb-5">Nos créateurs</h1>
+          <h1 className="text-4xl font-bold mb-5">Tout voir</h1>
         </div>
         {/* Carousel */}
         <Carousel className="mt-10">
           <CarouselContent>
             {creators.map((_, index) => (
               <CarouselItem key={index} className="basis-1/4">
-                <Link href={`/${_.slug}`} className="block relative group">
+                <Link
+                  href={`/creator/${_.slug}`}
+                  className="block relative group"
+                >
                   <div className="relative w-full h-64 rounded-lg overflow-hidden shadow-md">
                     <img
                       src={`${_.image_url}`}
