@@ -4,21 +4,14 @@ import React, { type SVGProps } from "react";
 import { GradientHeading } from "@/components/ui/gradient-heading";
 import { LogoCarousel } from "@/components/ui/logo-carousel";
 
-const orangemoney = "orangemoney.png";
-const stripe = "stripe.png";
-const wave = "wave.jpg";
-const visa = "visa.png";
-const moov = "moov.png"
-const mtn = "mtn.jpg";
-
 // Массив с логотипами
 const allLogos = [
-  { name: "OM", id: 1, img: orangemoney },
-  { name: "WAVE", id: 2, img: wave },
-  { name: "MTN", id: 3, img: mtn },
-  { name: "MOOV MONEY", id: 4, img: moov },
-  { name: "VISA", id: 5, img: visa },
-  { name: "STRIPE", id: 6, img: stripe },
+  { name: "OM", id: 1, img: "/orangemoney.png" },
+  { name: "WAVE", id: 2, img: "/wave.jpg" },
+  { name: "MTN", id: 3, img: "/mtn.jpg" },
+  { name: "MOOV MONEY", id: 4, img: "/moov.png" },
+  { name: "VISA", id: 5, img: "/visa.png" },
+  { name: "STRIPE", id: 6, img: "/stripe.png" },
 ];
 
 export function BestSection() {
@@ -29,11 +22,7 @@ export function BestSection() {
           <GradientHeading variant="secondary">
             Les meilleurs sont déjà présent
           </GradientHeading>
-          <a href="https://www.newcult.co" target="_blank">
-            <GradientHeading size="xxl">
-              Fais toi payer un verre
-            </GradientHeading>
-          </a>
+          <GradientHeading size="xxl">Fais toi payer un verre</GradientHeading>
         </div>
 
         <LogoCarousel columnCount={3} logos={allLogos} />
