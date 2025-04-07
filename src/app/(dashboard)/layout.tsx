@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ProfileFloatButton } from "@/layout/dashboard/ui/profile-float-button";
 import { DashboardSidebar } from "@/layout/dashboard/ui/sections/sidebar/dashboard-sidebar";
+
 export default function DashboardMainLayout({
   children,
 }: {
@@ -15,18 +16,24 @@ export default function DashboardMainLayout({
 
   return (
     <SidebarProvider>
-      <DashboardSidebar />
-      <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-          <div className="flex items-center gap-2 px-4">
-            <SidebarTrigger className="-ml-1" />
-            <Separator orientation="vertical" className="mr-2 h-4" />
+      <DashboardSidebar className="hidden sm:flex" />
+      <SidebarInset className="w-full">
+        <header className="flex h-14 sm:h-16 shrink-0 items-center gap-2 border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+          <div className="flex items-center gap-2 px-2 sm:px-4">
+            <SidebarTrigger className="sm:-ml-1" />
+            <Separator
+              orientation="vertical"
+              className="mx-2 h-4 hidden sm:block"
+            />
+            <div className="font-medium text-sm sm:text-base">
+              Payemoiunverre
+            </div>
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 pt-0 relative">
           {children}
-          <ProfileFloatButton />
         </div>
+        <ProfileFloatButton className="sm:bottom-6 sm:right-6" />
       </SidebarInset>
     </SidebarProvider>
   );
