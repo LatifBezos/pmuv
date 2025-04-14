@@ -44,7 +44,7 @@ const menuItems = [
   },
   {
     label: "Se connecter",
-    href: "/partners",
+    href: "/dashboard",
   },
 ];
 export const HomeNavbar = () => {

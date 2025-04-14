@@ -32,7 +32,7 @@ export function ProfileFloatButton() {
             <Link href="/dashboard/settings">My account</Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/dashboard/logout">Logout</Link>
+            <Link href="/">Logout</Link>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

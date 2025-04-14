@@ -19,15 +19,15 @@ export function ProfileSection() {
           <div className="relative h-16 w-16 overflow-hidden rounded-full bg-slate-400"></div>
           <div className="flex flex-col">
             <h1 className="text-2xl font-semibold">
-              Hi, Ange Cédric Joël DUAKON
+              Hi, Latif Tondossama
             </h1>
             <a
-              href="https://pmuv.com/jocode"
+              href="https://payemoiunverre.com/superlatif"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:underline"
             >
-              pmuv.com/jocode
+              payemoiunverre.com/superlatif
             </a>
           </div>
         </div>

@@ -101,12 +101,7 @@ const LogoColumn: React.FC<LogoColumnProps> = React.memo(
               },
             }}
           >
-            <Image
-              src={currentLogo}
-              alt={logos[currentIndex].name}
-              fill
-              className="h-20 w-20 max-h-[80%] max-w-[80%] object-contain md:h-32 md:w-32"
-            />
+            
           </motion.div>
         </AnimatePresence>
       </motion.div>
