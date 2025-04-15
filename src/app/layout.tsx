@@ -54,7 +54,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} ${ubuntu.variable} ${merriweather.variable} ${playfairDisplay.variable} antialiased`}
       >
         <NextTopLoader
-          color="#ffffff"
+          color="#EEEEEE"
           initialPosition={0.08}
           crawlSpeed={200}
           height={3}
