@@ -7,7 +7,9 @@ import { useState } from "react";
 import { HomeNavbarLogo } from "./home-navbar-logo";
 
 import { cn } from "@/lib/utils";
+
 import { AnimatePresence, motion } from "motion/react";
+
 import { Button } from "@/components/ui/button";
 
 const navbarItems = [
@@ -104,7 +106,7 @@ export const HomeNavbar = () => {
           </div>
         </button>
       </div>
-
+      
       <AnimatePresence initial={false}>
         {isMenuOpen && (
           <motion.div

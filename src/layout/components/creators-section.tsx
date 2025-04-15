@@ -1,6 +1,16 @@
 import { Creators } from "@/types";
 import { BeerIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import PaymentBox from "@/layout/components/payment-box";
 
 function CreatorSection({ creator }: { creator: Creators }) {
   return (
@@ -22,9 +32,21 @@ function CreatorSection({ creator }: { creator: Creators }) {
           <div className="flex flex-col-2 gap-4 items-center mb-4">
             <h2 className="text-5xl font-bold mb-2">{creator.slug}</h2>
             <div className="text-lg font-semibold">
-                <Button size="sm" className="gap-4" variant="outline">
-                  Paye lui un verre<BeerIcon className="w-4 h-2" />
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="outline" className="cursor-pointer">
+                    Paye lui un verre<BeerIcon className="w-4 h-2" />
+                    </Button>
+                  </DialogTrigger>
+                  <DialogHeader>
+                    <DialogTitle></DialogTitle>
+                  </DialogHeader>
+                  <DialogContent className="bg-black border-2 border-white">
+                    <PaymentBox color={creator.color}/>
+                  </DialogContent>
+                </Dialog>
+
+
             </div>
           </div>
           <p className="text-lg leading-relaxed text-black max-w-md">
