@@ -20,7 +20,7 @@ export function CreatorsAll({ creators }: CreatorsAllProps) {
           {creators.map((creator, index) => (
             <Link
               key={index}
-              href={`/creators/${creator.slug}`}
+              href={`/creator/${creator.slug}`}
               className="block relative group"
             >
               <div className="relative w-full h-64 rounded-lg overflow-hidden shadow-md">
