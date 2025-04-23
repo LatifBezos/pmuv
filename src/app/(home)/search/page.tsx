@@ -13,7 +13,6 @@ const SearchPage = () => {
 
   return (
     <div className="container w-full mx-auto">
-      <HomeNavbar />
       <SearchBar />
       <ListingCrea />
       <Footer />

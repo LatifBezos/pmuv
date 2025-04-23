@@ -27,7 +27,11 @@ const PaymentBox = ({color} : Color) => {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto bg-black p-6 sm:p-8 rounded-2xl text-center text-black mt-10">
+    <div className="w-full max-w-md mx-auto bg-black p-4 sm:p-8 rounded-2xl text-center text-black mt-4">
+      <div className="flex justify-center">
+      <BeerIcon className="size-10 rotate-12 mb-2" 
+        style={{ color:`${color}`}}/>
+      </div>
       <h2 className="text-3xl font-bold mb-6 text-white">Offrir un verre</h2>
 
       {/* Offres prédéfinies */}
@@ -74,7 +78,7 @@ const PaymentBox = ({color} : Color) => {
 
       {/* Message personnalisé */}
       <Textarea
-        className="w-full mb-6 p-3 border rounded-lg"
+        className="w-full mb-6 p-3 border rounded-lg text-white"
         placeholder="Laissez un message comme si vous étiez dans un bar..."
         value={message}
         onChange={(e) => setMessage(e.target.value)}
