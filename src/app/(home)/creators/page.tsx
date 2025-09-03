@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CreatorsAll } from "@/layout/components/creators-listing";
 import { getCreators } from "@/utils/supabase/queries";
 
-const SearchPage = async () => {
+const CreatorPage = async () => {
   const data = await getCreators();
 
   return (
@@ -31,4 +31,4 @@ const CreatorsLoading = () => {
   );
 };
 
-export default SearchPage;
+export default CreatorPage;

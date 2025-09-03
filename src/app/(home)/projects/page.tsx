@@ -1,30 +1,26 @@
 import { Suspense } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { CreatorsAll } from "@/layout/components/creators-listing";
-import { getCreators } from "@/utils/supabase/queries";
-import SearchBox from "@/layout/components/searchbox";
+import { getProjects } from "@/utils/supabase/queries";
+import { EventsAll } from "@/layout/components/events-listing";
 
-
-const SearchPage = async () => {
-  const data = await getCreators();
+const ProjectsPage = async () => {
+  const data = await getProjects();
 
   return (
-    <Suspense fallback={<CreatorsLoading />}>
-      <div className="w-full align-center bg-[#40916c] py-8">
-        <SearchBox />
-      </div>
+    <Suspense fallback={<ProjectsLoading />}>
       <div className="container w-full mx-auto">
-        <CreatorsAll creators={data} />
+        <EventsAll events={data} />
       </div>
     </Suspense>
   );
 };
 
-const CreatorsLoading = () => {
+const ProjectsLoading = () => {
   return (
-    <div className="w-full px-4 py-20">
+    <div className="w-full px-4 py-10">
       <div className="container mx-auto">
+        {/* Grid layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
           {Array.from({ length: 12 }).map((_, index) => (
             <Skeleton key={index} className="w-full h-64 rounded-lg" />
@@ -35,4 +31,4 @@ const CreatorsLoading = () => {
   );
 };
 
-export default SearchPage;
+export default ProjectsPage;

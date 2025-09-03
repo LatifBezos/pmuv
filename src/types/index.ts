@@ -21,6 +21,47 @@ export interface Creators {
     color : string
 }
 
+export interface Projects {
+    color: string
+    created_at: string
+    creator_id: string
+    description: string
+    id: string
+    image_url: string
+    slug: string
+    status: string
+    title: string
+    updated_at: string
+}
+
+export interface Catalogues {
+    created_at: string
+    creator_id: string
+    currency: string
+    description: string
+    id: string
+    image_url: string
+    price: number
+    slug: string
+    stock: number
+    title: string
+}
+
+
+export interface Events {
+    created_at: string
+    creator_id: string
+    description: string
+    end_date: string
+    id: string
+    image_url: string
+    location: string
+    project_id: string
+    slug: string
+    start_date: string
+    title: string
+}
+
 export interface WalletTransactions {
     id : string,
     creator_id: string,

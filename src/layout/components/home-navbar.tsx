@@ -19,11 +19,11 @@ const navbarItems = [
   },
   {
     label: "Events",
-    href: "/artists",
+    href: "/events",
   },
   {
     label: "Projets",
-    href: "/news",
+    href: "/projects",
   },
 ];
 
@@ -34,11 +34,15 @@ const menuItems = [
   },
   {
     label: "Events",
-    href: "/shows",
+    href: "/events",
   },
   {
     label: "Projects",
-    href: "/shop",
+    href: "/projects",
+  },
+  {
+    label: "Projects",
+    href: "/catalogues",
   },
   {
     label: "S'inscrire",
