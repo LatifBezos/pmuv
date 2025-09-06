@@ -20,7 +20,6 @@ const EventsLoading = () => {
   return (
     <div className="w-full px-4 py-10">
       <div className="container mx-auto">
-        {/* Grid layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
           {Array.from({ length: 12 }).map((_, index) => (
             <Skeleton key={index} className="w-full h-64 rounded-lg" />

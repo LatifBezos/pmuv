@@ -41,16 +41,16 @@ const menuItems = [
     href: "/projects",
   },
   {
-    label: "Projects",
+    label: "Catalogues",
     href: "/catalogues",
   },
   {
     label: "S'inscrire",
-    href: "/about",
+    href: "/signup",
   },
   {
     label: "Se connecter",
-    href: "/dashboard",
+    href: "/login",
   },
 ];
 export const HomeNavbar = () => {
