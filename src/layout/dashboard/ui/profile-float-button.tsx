@@ -8,6 +8,7 @@ import {
 import { MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import {logOut} from "@/hooks/auth0"
 
 interface ProfileFloatButtonProps
   extends React.HTMLAttributes<HTMLDivElement> {}
@@ -45,7 +46,9 @@ export function ProfileFloatButton({
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/">Logout</Link>
+            <button onClick={logOut} className="cursor-pointer">
+              Logout
+            </button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

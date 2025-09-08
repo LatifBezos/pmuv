@@ -1,4 +1,8 @@
+"use client"
+
 import { Separator } from "@/components/ui/separator";
+import createClient from "@/utils/supabase/client";
+
 import {
   SidebarInset,
   SidebarProvider,
@@ -6,13 +10,31 @@ import {
 } from "@/components/ui/sidebar";
 import { ProfileFloatButton } from "@/layout/dashboard/ui/profile-float-button";
 import { DashboardSidebar } from "@/layout/dashboard/ui/sections/sidebar/dashboard-sidebar";
+import { useEffect, useState } from "react";
 
 export default function DashboardMainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  // TODO: Check if user is authenticated
+
+  const [user, setUser] = useState<any>(null);
+
+
+useEffect(() => {
+  const fetchSession = async () => {
+    const supabase = createClient();
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) {
+      console.log("sess",session)
+      const user = session.user;
+      console.log(user.id);       
+      console.log(user.email); 
+      console.log(user.user_metadata); 
+    }
+  };
+  fetchSession();
+}, []);
 
   return (
     <SidebarProvider>

@@ -1,18 +1,82 @@
+"use client";
+
 import Link from "next/link";
+import {authSign, authConnect, authGoogle, authFB} from "@/hooks/auth0";
+import { BeerIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useState } from "react";
+
 
 export default function LoginPage() {
+  const [email,setEmail] = useState("")
+  const [pass,setPass] = useState("")
+
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    console.log("email",value)
+  }
+
+  const handlePass = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value.trim();
+    console.log("password",value)
+  }
+
+  const signUp = async () => {
+    const result = await authConnect(email, pass);
+    console.log("résult", result);
+  }
+
+
   return (
     <div className="w-full h-screen grid grid-cols-1 md:grid-cols-2">
+      <span className="absolute top-5 left-5 cursor-pointer">
+          <Link href="/" className="text-white">
+              <BeerIcon
+              className={cn(
+                "size-8 sm:size-12 text-white rotate-12 transition-all duration-200"
+              )}
+            />
+          </Link>
+        </span>
       {/* SECTION GAUCHE */}
       <div className="flex flex-col items-center justify-center bg-[#40916c] p-8">
         <h1 className="text-3xl font-bold text-white mb-8">
           Content de vous revoir
         </h1>
 
+        <div className="flex flex-col w-full max-w-sm space-y-4">
+              <input 
+                type="text"
+                placeholder="email"
+                onChange={handleEmail}
+                className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-white placeholder-gray-100 w-full text-center"
+              />
+              <input 
+                type="password"
+                placeholder="password"
+                onChange={handlePass}
+                className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-white placeholder-gray-100 w-full text-center"
+              />
+              <button className="bg-white text-[#40916c] font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition mb-4 cursor-pointer"
+                onClick={signUp}
+              >
+                Créer mon compte
+              </button>
+        </div>
+
+        <div className="flex items-center my-5 justify-center w-full max-w-sm space-x-4">
+          <span className="w-full h-0.5 bg-gray-200"></span>
+          <p className="text-lg text-white mb-1">ou</p>
+          <span className="w-full h-0.5 bg-gray-200"></span>
+        </div>
+
+
         {/* Boutons sociaux */}
         <div className="flex flex-col w-full max-w-sm space-y-4">
           {/* Google */}
-          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg hover:bg-gray-200 transition">
+          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg hover:bg-gray-200 transition p-12 cursor-pointer"
+            onClick={() => authGoogle()}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 48 48"
@@ -55,7 +119,9 @@ export default function LoginPage() {
           </button>
 
           {/* Facebook */}
-          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg hover:bg-gray-200 transition">
+          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg hover:bg-gray-200 transition cursor-pointer"
+            onClick={() => authFB()}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -115,7 +181,7 @@ export default function LoginPage() {
         </div>
       </div>
 
-      {/* SECTION DROITE (cachée sur mobile) */}
+      
       <div className="hidden md:flex items-center justify-center bg-white">
         <img
           src="/login-illustration.png"

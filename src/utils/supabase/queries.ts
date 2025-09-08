@@ -31,6 +31,27 @@ export const slugCreator = cache(async (slug: string) => {
 });
 
 
+export const slugSearch = cache(async (slug: string) => {
+  if (!slug) return false;
+
+  const { data, error } = await supabase
+    .from("creators")
+    .select("*")
+    .eq("slug", slug); // recherche exacte
+
+  if (error) {
+    console.error("Error fetching creators with this slug:", error);
+    return false;
+  }
+
+  if (data && data.length > 0) {
+    console.log("slug trouvé", data);
+    return true; // le slug existe déjà
+  } else {
+    return false; // le slug n'existe pas
+  }
+});
+
 
 export const getProjects = cache(async () => {
     const { data, error } = await supabase
