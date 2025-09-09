@@ -40,7 +40,7 @@ export function CreatorsSection() {
         <Carousel className="mt-10">
           <CarouselContent>
             {creators.map((_, index) => (
-              <CarouselItem key={index} className="basis-1/4">
+              <CarouselItem key={index} className="basis-2/3 md:basis-1/4">
                 <Link
                   href={`/creator/${_.slug}`}
                   className="block relative group"

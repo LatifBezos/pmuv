@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 
 function FeaturesSection() {
   return (
-    <div className="w-full py-20 lg:py-40">
+    <div className="w-full px-10 py-10 lg:py-40">
       <div className="container mx-auto">
         <div className="flex flex-col-reverse lg:flex-row gap-10 lg:items-center">
           <div className="flex gap-4 pl-0 lg:pl-20 flex-col  flex-1">

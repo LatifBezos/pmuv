@@ -4,7 +4,7 @@ import { MoveRight, PhoneCall } from "lucide-react";
 
 function HeroSection() {
   return (
-    <div className="w-full py-20 lg:py-10 px-4">
+    <div className="w-full py-10 lg:py-10 px-4">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 gap-8 items-center md:grid-cols-2">
           <div className="flex gap-4 flex-col">
@@ -17,7 +17,7 @@ function HeroSection() {
               </h1>
               <p className="text-xl leading-relaxed tracking-tight text-muted-foreground max-w-md text-left">
                 Permettez à vos supporters de vous remercier en vous offrant un
-                verre. Une façon simple et conviviale de recevoir leur soutien !
+                verre. Une faço n simple et conviviale de recevoir leur soutien !
               </p>
             </div>
             <div className="flex flex-row gap-4">
