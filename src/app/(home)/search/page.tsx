@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
-import { CreatorsAll } from "@/layout/components/creators-listing";
 import { getCreators } from "@/utils/supabase/queries";
 import SearchBox from "@/layout/components/searchbox";
+
+import { CreatorsAll } from "@/layout/components/creators-listing";
 
 
 const SearchPage = async () => {
