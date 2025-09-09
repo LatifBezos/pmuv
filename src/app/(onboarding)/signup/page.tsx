@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { LoaderCircle, CircleCheck, X, BeerIcon } from "lucide-react";
-import {authSign, authGoogle, authFB} from "@/hooks/auth0";
+import { authSign, authGoogle, authFB } from "@/hooks/auth0";
 import { useState, useRef } from "react";
 import { slugSearch } from "@/utils/supabase/queries";
 import { cn } from "@/lib/utils";
@@ -11,25 +11,25 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [slugValid, setSlugValid] = useState<boolean | null>(null);
   const typingTimeout = useRef<NodeJS.Timeout | null>(null);
-  const [slug,setSlug] = useState("")
+  const [slug, setSlug] = useState("")
 
-  
+
   const [showConnect, setShowConnect] = useState(false);
 
 
-  const [email,setEmail] = useState("")
-  const [pass,setPass] = useState("")
+  const [email, setEmail] = useState("")
+  const [pass, setPass] = useState("")
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     setEmail(value)
-    console.log("email",value)
+    console.log("email", value)
   }
 
   const handlePass = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     setPass(value)
-    console.log("password",value)
+    console.log("password", value)
   }
 
   const signUp = async () => {
@@ -39,9 +39,9 @@ export default function SignupPage() {
 
   const userTap = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
-    
+
     setSlug(value)
-    console.log("mon slug",slug)
+    console.log("mon slug", slug)
     setLoading(true);
 
     if (typingTimeout.current) {
@@ -83,7 +83,7 @@ export default function SignupPage() {
       {!showConnect && (<div className="flex flex-col items-center justify-center bg-[#40916c] p-8">
         <span className="absolute top-5 right-5 cursor-pointer">
           <Link href="/" className="text-white">
-              <BeerIcon
+            <BeerIcon
               className={cn(
                 "size-8 sm:size-12 text-white rotate-12 transition-all duration-200"
               )}
@@ -135,27 +135,27 @@ export default function SignupPage() {
         <h1 className="text-3xl font-bold text-white mb-8">
           Bonjour , {slug}.
         </h1>
-        
+
 
         {/* Section connect */}
         <div className="flex flex-col w-full max-w-sm space-y-4">
-              <input 
-                type="text"
-                placeholder="email"
-                onChange={handleEmail}
-                className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-white placeholder-gray-100 w-full text-center"
-              />
-              <input 
-                type="password"
-                placeholder="password"
-                onChange={handlePass}
-                className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-white placeholder-gray-100 w-full text-center"
-              />
-              <button className="bg-white text-[#40916c] font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition mb-4 cursor-pointer"
-                onClick={signUp}
-              >
-                S'inscrire
-              </button>
+          <input
+            type="text"
+            placeholder="email"
+            onChange={handleEmail}
+            className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-white placeholder-gray-100 w-full text-center"
+          />
+          <input
+            type="password"
+            placeholder="password"
+            onChange={handlePass}
+            className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-white placeholder-gray-100 w-full text-center"
+          />
+          <button className="bg-white text-[#40916c] font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition mb-4 cursor-pointer"
+            onClick={signUp}
+          >
+            S'inscrire
+          </button>
         </div>
 
         <div className="flex items-center my-5 justify-center w-full max-w-sm space-x-4">

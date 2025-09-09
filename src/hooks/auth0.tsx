@@ -66,19 +66,19 @@ export async function authGoogle() {
 
 
 export async function authFB() {
-    const supabase = getSupabase()
-    
-    const {data, error} = await supabase.auth.signInWithOAuth({
-        provider:"facebook",
-        options: {
-            redirectTo: `http://localhost:3010/dashboard`,
-        },
-    })
-    if (error) {
-        console.error("Erreur Google OAuth :", error.message);
-    } else {
-        console.log("Redirection vers Google OAuth…", data);
-    }
+  const supabase = getSupabase()
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "facebook",
+    options: {
+      redirectTo: `http://localhost:3010/dashboard`,
+    },
+  })
+  if (error) {
+    console.error("Erreur Google OAuth :", error.message);
+  } else {
+    console.log("Redirection vers Google OAuth…", data);
+  }
 }
 
 
