@@ -9,10 +9,10 @@ export function SupportersSection() {
         <Heart className="h-5 w-5 sm:h-6 sm:w-6 text-gray-400" />
       </div>
       <h2 className="text-lg sm:text-xl font-semibold">
-        You don't have any supporters yet
+          Vous n'avez pas encore de supporters
       </h2>
       <p className="text-sm sm:text-base text-muted-foreground max-w-xs sm:max-w-sm">
-        Share your page with your audience to get started.
+        Partagez votre page avec votre audience pour commencer.
       </p>
     </div>
   );

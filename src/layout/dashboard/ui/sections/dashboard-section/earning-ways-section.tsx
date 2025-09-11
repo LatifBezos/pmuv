@@ -6,7 +6,7 @@ import Link from "next/link";
 export function EarningWaysSection() {
   return (
     <div className="flex flex-col gap-4 sm:gap-6 w-full">
-      <h2 className="text-xl sm:text-2xl font-semibold">More ways to earn</h2>
+      <h2 className="text-xl sm:text-2xl font-semibold">Plus de façons de gagner</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Membership Card */}
@@ -17,16 +17,16 @@ export function EarningWaysSection() {
             </div>
           </div>
 
-          <h3 className="text-lg sm:text-xl font-semibold mb-2">Membership</h3>
+          <h3 className="text-lg sm:text-xl font-semibold mb-2">Adhésion</h3>
           <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
-            Monthly membership for your biggest fans and supporters.
+            Adhésion mensuelle pour vos plus grands fans et supporters.
           </p>
 
           <Link
             href="/dashboard/memberships"
             className="flex items-center justify-between w-full px-4 sm:px-6 py-2.5 sm:py-3 rounded-full border border-gray-200 text-gray-800 hover:bg-gray-50 transition text-sm sm:text-base"
           >
-            <span>Enable</span>
+            <span>Activer</span>
             <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
           </Link>
         </div>
@@ -39,16 +39,16 @@ export function EarningWaysSection() {
             </div>
           </div>
 
-          <h3 className="text-lg sm:text-xl font-semibold mb-2">Shop</h3>
+          <h3 className="text-lg sm:text-xl font-semibold mb-2">Boutique</h3>
           <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
-            Introducing Shop, the creative way to sell.
+            Introducing Shop, la façon créative de vendre.
           </p>
 
           <Link
             href="/dashboard/shop"
             className="flex items-center justify-between w-full px-4 sm:px-6 py-2.5 sm:py-3 rounded-full border border-gray-200 text-gray-800 hover:bg-gray-50 transition text-sm sm:text-base"
           >
-            <span>Enable</span>
+            <span>Activer</span>
             <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
           </Link>
         </div>
@@ -62,10 +62,10 @@ export function EarningWaysSection() {
           </div>
 
           <h3 className="text-lg sm:text-xl font-semibold mb-2">
-            Exclusive posts
+            Posts exclusifs
           </h3>
           <p className="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">
-            Publish your best content exclusively for your supporters and
+            Publiez votre meilleur contenu exclusivement pour vos supporters et
             members.
           </p>
 
@@ -73,7 +73,7 @@ export function EarningWaysSection() {
             href="/dashboard/posts/new"
             className="flex items-center justify-between w-full px-4 sm:px-6 py-2.5 sm:py-3 rounded-full border border-gray-200 text-gray-800 hover:bg-gray-50 transition text-sm sm:text-base"
           >
-            <span>Write a post</span>
+            <span>Écrire un post</span>
             <ArrowRight className="h-4 w-4 sm:h-5 sm:w-5" />
           </Link>
         </div>
@@ -81,7 +81,7 @@ export function EarningWaysSection() {
 
       <div className="flex flex-wrap gap-4 sm:gap-6 text-gray-500 mt-4 text-sm sm:text-base">
         <Link href="/help" className="hover:underline">
-          Help Center
+            Centre d'aide
         </Link>
         <Link href="/faq" className="hover:underline">
           FAQ
@@ -90,7 +90,7 @@ export function EarningWaysSection() {
           Contact
         </Link>
         <Link href="/refer" className="hover:underline">
-          Refer a Creator
+          Référer un créateur
         </Link>
       </div>
     </div>

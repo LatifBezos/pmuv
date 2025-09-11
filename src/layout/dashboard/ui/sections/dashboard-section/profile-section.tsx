@@ -10,8 +10,21 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
+import { readUserData } from "@/utils/supabase/client";
+import { useCallback, useEffect, useState } from "react";
+import { User } from "@supabase/supabase-js";
+
 
 export function ProfileSection() {
+  const [userData, setuserData] = useState<User | null>(null);
+  const fetchUserData = useCallback(async () => {
+    const { data: { user } } = await readUserData();
+    setuserData(user);
+  }, []);
+
+  useEffect(() => {
+    fetchUserData();
+  }, [])
   return (
     <>
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 gap-4 bg-white rounded-xl">
@@ -19,7 +32,7 @@ export function ProfileSection() {
           <div className="relative h-14 w-14 sm:h-16 sm:w-16 overflow-hidden rounded-full bg-slate-400"></div>
           <div className="flex flex-col">
             <h1 className="text-2xl font-semibold">
-              Hi, Latif Tondossama
+              Bienvenue, {userData?.email}
             </h1>
             <a
               href="https://payemoiunverre.com/superlatif"
@@ -36,28 +49,28 @@ export function ProfileSection() {
           className="gap-2 rounded-full bg-zinc-900 hover:bg-zinc-800 w-full sm:w-auto"
         >
           <Share className="h-4 w-4 sm:h-5 sm:w-5" />
-          Share page
+          Partager la page
         </Button>
       </div>
 
       <div className="bg-white p-4 sm:p-6 rounded-xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0 mb-4 sm:mb-6">
-          <h2 className="text-xl sm:text-2xl font-semibold">Earnings</h2>
+          <h2 className="text-xl sm:text-2xl font-semibold">Gains</h2>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
                 className="gap-2 rounded-full px-4 border-gray-200 text-sm sm:text-base w-full sm:w-auto"
               >
-                Last 30 days
+                Derniers 30 jours
                 <ChevronDown className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>Last 7 days</DropdownMenuItem>
-              <DropdownMenuItem>Last 30 days</DropdownMenuItem>
-              <DropdownMenuItem>Last 90 days</DropdownMenuItem>
-              <DropdownMenuItem>All time</DropdownMenuItem>
+              <DropdownMenuItem>Derniers 7 jours</DropdownMenuItem>
+              <DropdownMenuItem>Derniers 30 jours</DropdownMenuItem>
+              <DropdownMenuItem>Derniers 90 jours</DropdownMenuItem>
+              <DropdownMenuItem>Tout le temps</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -80,14 +93,14 @@ export function ProfileSection() {
               <div className="size-4 sm:size-5 rounded bg-pink-100"></div>
               <span className="font-medium">$0</span>
               <span className="text-gray-500 text-sm sm:text-base">
-                Membership
+                Adhésion
               </span>
             </div>
 
             <div className="flex items-center gap-2">
               <div className="size-4 sm:size-5 rounded bg-cyan-100"></div>
               <span className="font-medium">$0</span>
-              <span className="text-gray-500 text-sm sm:text-base">Shop</span>
+              <span className="text-gray-500 text-sm sm:text-base">Boutique</span>
             </div>
           </div>
         </div>

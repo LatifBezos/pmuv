@@ -8,20 +8,23 @@ import { useState } from "react";
 
 
 export default function LoginPage() {
-  const [email,setEmail] = useState("")
-  const [pass,setPass] = useState("")
+  const [email, setEmail] = useState("")
+  const [pass, setPass] = useState("")
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     console.log("email",value)
+    setEmail(value)
   }
 
   const handlePass = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     console.log("password",value)
+    setPass(value)
   }
 
   const signUp = async () => {
+  console.log("Credentials", email, pass) 
     const result = await authConnect(email, pass);
     console.log("résult", result);
   }
@@ -60,7 +63,7 @@ export default function LoginPage() {
               <button className="bg-white text-[#40916c] font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition mb-4 cursor-pointer"
                 onClick={signUp}
               >
-                Créer mon compte
+                Se connecter
               </button>
         </div>
 

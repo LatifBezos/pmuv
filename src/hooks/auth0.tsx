@@ -21,7 +21,7 @@ export async function authSign(email: string, password: string): Promise<{ error
   if (error) {
     return { error: error.message, message: "" };
   } else {
-    window.location.href = "http://localhost:3010/dashboard";
+    window.location.href = "http://localhost:3000/dashboard";
     return { error: null, message: "Inscription réussie !" };
   }
 }
@@ -29,6 +29,7 @@ export async function authSign(email: string, password: string): Promise<{ error
 
 export async function authConnect(email: string, password: string): Promise<{ error: string | null, message: string }> {
   const supabase = getSupabase();
+
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password: password,
@@ -53,7 +54,7 @@ export async function authGoogle() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "google",
     options: {
-      redirectTo: "http://localhost:3010/dashboard",
+      redirectTo: "http://localhost:3000/dashboard",
     },
   });
 
@@ -71,7 +72,7 @@ export async function authFB() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "facebook",
     options: {
-      redirectTo: `http://localhost:3010/dashboard`,
+      redirectTo: `http://localhost:3000/dashboard`,
     },
   })
   if (error) {

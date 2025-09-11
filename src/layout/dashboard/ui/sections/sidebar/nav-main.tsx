@@ -7,7 +7,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
-import { type LucideIcon, ExternalLink, Eye, Home, Users } from "lucide-react";
+import { type LucideIcon, CreditCard, ExternalLink, Eye, Heart, Home, Palette, Settings, Users } from "lucide-react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
@@ -22,13 +22,33 @@ export function NavMain() {
   };
 
   const mainItems: NavMainItem[] = [
-    { title: "Home", icon: Home, path: "/dashboard" },
-    { title: "View page", icon: Eye, path: "/creator/sarr", target: "_blank" },
+    { title: "Tableau de bord", icon: Home, path: "/dashboard" },
+    { title: "Ma page", icon: Eye, path: "/creator/sarr", target: "_blank" },
     {
-      title: "Explore creators",
+      title: "Explorer les créateurs",
       icon: Users,
       path: "/dashboard/explore-creators",
     },
+    {
+      title: "Supporters",
+      icon: Heart,
+      path: "/dashboard/supporters",
+    },
+    {
+      title: "Mon thème",
+      icon: Palette,
+      path: "/dashboard/theme",
+    },
+    {
+      title: "Modes de paiement",
+      icon: CreditCard,
+      path: "/dashboard/payment-modes",
+    },
+    {
+      title: "Paramètres",
+      icon: Settings,
+      path: "/dashboard/settings",  
+    }
   ];
   return (
     <SidebarMenu className="mb-4">
