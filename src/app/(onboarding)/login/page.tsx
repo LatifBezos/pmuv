@@ -33,14 +33,14 @@ export default function LoginPage() {
           <Link href="/" className="text-white">
               <BeerIcon
               className={cn(
-                "size-8 sm:size-12 text-white rotate-12 transition-all duration-200"
+                "size-8 sm:size-12 text-black rotate-12 transition-all duration-200"
               )}
             />
           </Link>
         </span>
       {/* SECTION GAUCHE */}
-      <div className="flex flex-col items-center justify-center bg-[#40916c] p-8">
-        <h1 className="text-3xl font-bold text-white mb-8">
+      <div className="flex flex-col items-center justify-center bg-white p-8">
+        <h1 className="text-3xl font-bold text-black mb-8">
           Content de vous revoir
         </h1>
 
@@ -49,15 +49,15 @@ export default function LoginPage() {
                 type="text"
                 placeholder="email"
                 onChange={handleEmail}
-                className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-white placeholder-gray-100 w-full text-center"
+                className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-black placeholder-black w-full text-center"
               />
               <input 
                 type="password"
                 placeholder="password"
                 onChange={handlePass}
-                className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-white placeholder-gray-100 w-full text-center"
+                className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-black placeholder-black w-full text-center"
               />
-              <button className="bg-white text-[#40916c] font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition mb-4 cursor-pointer"
+              <button className="bg-blue-200 text-black font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition mb-4 cursor-pointer"
                 onClick={signUp}
               >
                 Créer mon compte
@@ -74,7 +74,7 @@ export default function LoginPage() {
         {/* Boutons sociaux */}
         <div className="flex flex-col w-full max-w-sm space-y-4">
           {/* Google */}
-          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg hover:bg-gray-200 transition p-12 cursor-pointer"
+          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg border border-2 border-black hover:bg-gray-200 transition p-12 cursor-pointer"
             onClick={() => authGoogle()}
           >
             <svg
@@ -119,7 +119,7 @@ export default function LoginPage() {
           </button>
 
           {/* Facebook */}
-          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg hover:bg-gray-200 transition cursor-pointer"
+          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg border border-2 border-black hover:bg-gray-200 transition cursor-pointer"
             onClick={() => authFB()}
           >
             <svg
@@ -145,7 +145,7 @@ export default function LoginPage() {
           </button>
 
           {/* LinkedIn */}
-          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg hover:bg-gray-200 transition">
+          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg border border-2 border-black hover:bg-gray-200 transition">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -173,7 +173,7 @@ export default function LoginPage() {
           </button>
         </div>
 
-        <div className="flex items-center mt-6 text-white text-center">
+        <div className="flex items-center mt-6 text-black text-center">
           <p>Pas encore de compte ?</p>
           <Link href="/signup" className="underline font-bold ml-2">
             S'inscrire
@@ -184,7 +184,7 @@ export default function LoginPage() {
       
       <div className="hidden md:flex items-center justify-center bg-white">
         <img
-          src="/login-illustration.png"
+          src="/pablo-heimplatz-ZODcBkEohk8-unsplash.jpg"
           alt="Login Illustration"
           className="w-full h-screen object-cover"
         />

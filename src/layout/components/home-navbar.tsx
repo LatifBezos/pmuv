@@ -137,7 +137,7 @@ export const HomeNavbar = () => {
                 </ul>
               </nav>
               <p className="font-serif text-base sm:text-xl md:text-3xl text-center max-w-4xl mx-auto">
-                Paye moi un verre est une plateforme de financement participatif
+                Offre moi un verre est une plateforme de financement participatif
                 adaptée à l'Afrique, permettant aux créateurs, entrepreneurs et
                 particuliers de recevoir un soutien financier direct.
               </p>

@@ -32,7 +32,7 @@ export function BestSection() {
           </GradientHeading>
           <a href="https://www.newcult.co" target="_blank">
             <GradientHeading size="xxl">
-              Fais toi payer un verre
+              Fais toi offrir un verre
             </GradientHeading>
           </a>
         </div>

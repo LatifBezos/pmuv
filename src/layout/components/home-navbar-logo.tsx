@@ -21,7 +21,7 @@ export const HomeNavbarLogo = ({
           )}
         />
         <h1 className="hidden sm:block text-xl sm:text-2xl font-semibold tracking-tight text-white transition-all duration-200">
-          Paye moi un verre ®
+          Offre moi un verre ®
         </h1>
       </div>
     </Link>

@@ -73,35 +73,35 @@ export default function SignupPage() {
     <div className="w-full h-screen grid grid-cols-1 md:grid-cols-2">
       <div className="hidden md:flex items-center justify-center bg-white">
         <img
-          src="/signup-illustration.png"
+          src="/jed-villejo-pumko2FFxY0-unsplash.jpg"
           alt="Signup Illustration"
           className="w-full h-screen object-cover"
         />
       </div>
 
       {/* Section droite */}
-      {!showConnect && (<div className="flex flex-col items-center justify-center bg-[#40916c] p-8">
+      {!showConnect && (<div className="flex flex-col items-center justify-center bg-white p-8">
         <span className="absolute top-5 right-5 cursor-pointer">
           <Link href="/" className="text-white">
               <BeerIcon
               className={cn(
-                "size-8 sm:size-12 text-white rotate-12 transition-all duration-200"
+                "size-8 sm:size-12 text-black rotate-12 transition-all duration-200"
               )}
             />
           </Link>
         </span>
-        <h1 className="text-4xl font-bold text-white mb-2">Créer votre compte</h1>
-        <p className="text-gray-200 mb-8 text-lg">
+        <h1 className="text-4xl font-bold text-black mb-2">Créer votre compte</h1>
+        <p className="text-black mb-8 text-lg">
           Choisissez un [Slug] pour votre page.
         </p>
 
         <div className="flex items-start py-2 px-2 border border-2 rounded-md mb-4 w-full max-w-xs justify-center">
-          <p className="text-white basis-1/2">payemoiunverre.com/</p>
+          <p className="text-black basis-1/2">payemoiunverre.com/</p>
           <div className="flex items-center justify-between w-32 basis-1/2">
             <input
               type="text"
               placeholder="votre_slug"
-              className="outline-none text-white placeholder-gray-300 w-32"
+              className="outline-none text-black placeholder-black w-32"
               onChange={userTap}
             />
             <div>
@@ -113,16 +113,16 @@ export default function SignupPage() {
         </div>
 
         <div className="flex flex-col w-full max-w-xs">
-          <button className="bg-white text-[#40916c] font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition mb-4"
+          <button className="bg-white text-blue-300 font-bold py-2 px-4 rounded-lg border border-2 border-blue-300 hover:bg-blue-300 hover:text-black hover:cursor-pointer transition mb-4"
             onClick={() => setShowConnect(true)}
           >
             Créer mon compte
           </button>
         </div>
 
-        <div className="flex items-center mt-6 text-white text-center">
+        <div className="flex items-center mt-6 text-black text-center">
           <p>Vous avez déjà un compte ?</p>
-          <Link href="/login" className="underline font-bold ml-2">
+          <Link href="/login" className="underline text-black font-bold ml-2">
             Se connecter
           </Link>
         </div>
@@ -131,8 +131,8 @@ export default function SignupPage() {
 
 
 
-      {showConnect && (<div className="flex flex-col items-center justify-center bg-[#40916c] p-8">
-        <h1 className="text-3xl font-bold text-white mb-8">
+      {showConnect && (<div className="flex flex-col items-center justify-center bg-white p-8">
+        <h1 className="text-3xl font-bold text-black mb-8">
           Bonjour , {slug}.
         </h1>
         
@@ -143,15 +143,15 @@ export default function SignupPage() {
                 type="text"
                 placeholder="email"
                 onChange={handleEmail}
-                className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-white placeholder-gray-100 w-full text-center"
+                className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-black placeholder-black w-full text-center"
               />
               <input 
                 type="password"
                 placeholder="password"
                 onChange={handlePass}
-                className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-white placeholder-gray-100 w-full text-center"
+                className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-black placeholder-black w-full text-center"
               />
-              <button className="bg-white text-[#40916c] font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition mb-4 cursor-pointer"
+              <button className="bg-blue-200 text-black border border-2 border-blue-400 font-bold py-2 px-4 rounded-lg hover:bg-blue-200 transition mb-4 cursor-pointer"
                 onClick={signUp}
               >
                 S'inscrire
@@ -159,16 +159,16 @@ export default function SignupPage() {
         </div>
 
         <div className="flex items-center my-5 justify-center w-full max-w-sm space-x-4">
-          <span className="w-full h-0.5 bg-gray-200"></span>
-          <p className="text-lg text-white mb-1">ou</p>
-          <span className="w-full h-0.5 bg-gray-200"></span>
+          <span className="w-full h-0.5 bg-black"></span>
+          <p className="text-lg text-black mb-1">ou</p>
+          <span className="w-full h-0.5 bg-black"></span>
         </div>
 
 
         {/* Boutons sociaux */}
         <div className="flex flex-col w-full max-w-sm space-y-4">
           {/* Google */}
-          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg hover:bg-gray-200 transition p-12 cursor-pointer"
+          <button className="flex items-center justify-center text-black bg-white px-4 py-2 rounded-lg border border-2 border-black  hover:bg-gray-800 transition p-12 cursor-pointer"
             onClick={() => authGoogle()}
           >
             <svg
@@ -213,7 +213,7 @@ export default function SignupPage() {
           </button>
 
           {/* Facebook */}
-          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg hover:bg-gray-200 transition cursor-pointer"
+          <button className="flex items-center justify-center text-black bg-white px-4 py-2 rounded-lg border border-2 border-black hover:bg-gray-800 transition cursor-pointer"
             onClick={() => authFB()}
           >
             <svg
@@ -239,7 +239,7 @@ export default function SignupPage() {
           </button>
 
           {/* LinkedIn */}
-          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg hover:bg-gray-200 transition">
+          <button className="flex items-center justify-center text-black bg-white px-4 py-2 rounded-lg border border-2 border-black  hover:bg-gray-800 transition">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -267,7 +267,7 @@ export default function SignupPage() {
           </button>
         </div>
 
-        <div className="flex items-center mt-6 text-white text-center">
+        <div className="flex items-center mt-6 text-black text-center">
           <p>Pas encore de compte ?</p>
           <Link href="/signup" className="underline font-bold ml-2">
             S'inscrire
