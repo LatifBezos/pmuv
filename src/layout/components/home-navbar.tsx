@@ -10,17 +10,15 @@ import { cn } from "@/lib/utils";
 
 import { AnimatePresence, motion } from "motion/react";
 
-import { Button } from "@/components/ui/button";
-
 const navbarItems = [
   {
     label: "Createurs",
     href: "/creators",
   },
-  {
-    label: "Events",
-    href: "/events",
-  },
+  // {
+  //   label: "Events",
+  //   href: "/events",
+  // },
   {
     label: "Projets",
     href: "/projects",
@@ -32,18 +30,18 @@ const menuItems = [
     label: "Créateurs",
     href: "/creators",
   },
-  {
-    label: "Events",
-    href: "/events",
-  },
+  // {
+  //   label: "Events",
+  //   href: "/events",
+  // },
   {
     label: "Projects",
     href: "/projects",
   },
-  {
-    label: "Catalogues",
-    href: "/catalogues",
-  },
+  // {
+  //   label: "Catalogues",
+  //   href: "/catalogues",
+  // },
   {
     label: "S'inscrire",
     href: "/signup",
@@ -61,7 +59,7 @@ export const HomeNavbar = () => {
       <div
         className={cn(
           "flex items-center z-50 transition-all duration-200",
-          isMenuOpen && "invert"
+          isMenuOpen && "invert",
         )}
       >
         <HomeNavbarLogo />
@@ -110,7 +108,7 @@ export const HomeNavbar = () => {
           </div>
         </button>
       </div>
-      
+
       <AnimatePresence initial={false}>
         {isMenuOpen && (
           <motion.div
@@ -137,9 +135,10 @@ export const HomeNavbar = () => {
                 </ul>
               </nav>
               <p className="font-serif text-base sm:text-xl md:text-3xl text-center max-w-4xl mx-auto">
-                Offre moi un verre est une plateforme de financement participatif
-                adaptée à l'Afrique, permettant aux créateurs, entrepreneurs et
-                particuliers de recevoir un soutien financier direct.
+                Offre moi un verre est une plateforme de financement
+                participatif adaptée à l'Afrique, permettant aux créateurs,
+                entrepreneurs et particuliers de recevoir un soutien financier
+                direct.
               </p>
             </div>
           </motion.div>

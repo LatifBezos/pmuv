@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Separator } from "@/components/ui/separator";
 import createClient from "@/utils/supabase/client";
@@ -17,24 +17,24 @@ export default function DashboardMainLayout({
 }: {
   children: React.ReactNode;
 }) {
-
   const [user, setUser] = useState<any>(null);
 
-
-useEffect(() => {
-  const fetchSession = async () => {
-    const supabase = createClient();
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      console.log("sess",session)
-      const user = session.user;
-      console.log(user.id);       
-      console.log(user.email); 
-      console.log(user.user_metadata); 
-    }
-  };
-  fetchSession();
-}, []);
+  useEffect(() => {
+    const fetchSession = async () => {
+      const supabase = createClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session) {
+        console.log("sess", session);
+        const user = session.user;
+        console.log(user.id);
+        console.log(user.email);
+        console.log(user.user_metadata);
+      }
+    };
+    fetchSession();
+  }, []);
 
   return (
     <SidebarProvider>
@@ -48,7 +48,7 @@ useEffect(() => {
               className="mx-2 h-4 hidden sm:block"
             />
             <div className="font-medium text-sm sm:text-base">
-              Payemoiunverre
+              Offremoiunverre
             </div>
           </div>
         </header>

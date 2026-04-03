@@ -22,7 +22,7 @@ export function NavMain() {
   };
 
   const mainItems: NavMainItem[] = [
-    { title: "Home", icon: Home, path: "/dashboard" },
+    { title: "Overview", icon: Home, path: "/dashboard" },
     { title: "View page", icon: Eye, path: "/creator/sarr", target: "_blank" },
     {
       title: "Explore creators",
@@ -39,7 +39,7 @@ export function NavMain() {
               <item.icon
                 className={cn(
                   "h-5 w-5",
-                  pathname === item.path && "fill-cyan-500 stroke-3"
+                  pathname === item.path && "fill-cyan-500 stroke-3",
                 )}
               />
               <span>{item.title}</span>

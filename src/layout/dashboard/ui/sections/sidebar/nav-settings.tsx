@@ -1,6 +1,6 @@
 "use client";
 
-import { Palette, Zap, DollarSign, Settings } from "lucide-react";
+import { DollarSign, Settings } from "lucide-react";
 
 import {
   SidebarGroup,
@@ -12,8 +12,8 @@ import {
 
 export function NavSettings() {
   const settingsItems = [
-    { title: "Buttons & Graphics", icon: Palette },
-    { title: "Integrations", icon: Zap },
+    // { title: "Buttons & Graphics", icon: Palette },
+    // { title: "Integrations", icon: Zap },
     { title: "Payouts", icon: DollarSign },
     { title: "Settings", icon: Settings },
   ];
