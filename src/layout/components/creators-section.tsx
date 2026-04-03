@@ -1,16 +1,4 @@
 import { Creators } from "@/types";
-import { BeerIcon } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import PaymentBox from "@/layout/components/payment-box";
 
 export default function CreatorSection({ creator }: { creator: Creators }) {
   const messages = [
@@ -47,7 +35,7 @@ export default function CreatorSection({ creator }: { creator: Creators }) {
           <h1 className="text-4xl font-extrabold leading-tight">
             PAYE UN VERRE À <br /> {creator.slug}
           </h1>
-          <p className="italic">Avec PayeMoiUnVerre 🍹</p>
+          <p className="italic">Avec Offremoiunverre 🍹</p>
 
           {/* Choix de verres */}
           <div className="flex gap-2 my-4">
@@ -95,6 +83,5 @@ export default function CreatorSection({ creator }: { creator: Creators }) {
     </div>
   );
 }
-
 
 export { CreatorSection };

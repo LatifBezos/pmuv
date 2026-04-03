@@ -7,8 +7,8 @@ import {
   Playfair_Display,
   Ubuntu,
 } from "next/font/google";
-import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -45,9 +45,9 @@ const ebGaramond = EB_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Payemoiunverre",
+  title: "Offremoiunverre",
   description:
-    "Payemoiunverre, une façon simple et conviviale de recevoir le soutien de votre communauté",
+    "Offremoiunverre, une façon simple et conviviale de recevoir le soutien de votre communauté",
 };
 
 export default function RootLayout({

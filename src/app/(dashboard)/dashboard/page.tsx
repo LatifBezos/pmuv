@@ -1,7 +1,6 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-import { EarningWaysSection } from "@/layout/dashboard/ui/sections/dashboard-section/earning-ways-section";
 import { ProfileSection } from "@/layout/dashboard/ui/sections/dashboard-section/profile-section";
 import { SupportersSection } from "@/layout/dashboard/ui/sections/dashboard-section/supporters-section";
 import React from "react";
@@ -26,7 +25,7 @@ export default function DashboardPage() {
       <div className="flex flex-col gap-4 sm:gap-6 w-full max-w-screen md:max-w-4xl mx-auto px-4 sm:px-6 pb-8 py-12 md:py-8">
         <ProfileSection />
         <SupportersSection />
-        <EarningWaysSection />
+        {/* <EarningWaysSection /> */}
       </div>
     </React.Fragment>
   );

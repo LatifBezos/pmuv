@@ -1,14 +1,13 @@
 "use client";
 
-import { ChevronDown, Heart, LockIcon, Share, ShoppingBag } from "lucide-react";
-import Image from "next/image";
+import { ChevronDown, Share } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
 export function ProfileSection() {
@@ -18,16 +17,14 @@ export function ProfileSection() {
         <div className="flex items-center gap-4 w-full sm:w-auto">
           <div className="relative h-14 w-14 sm:h-16 sm:w-16 overflow-hidden rounded-full bg-slate-400"></div>
           <div className="flex flex-col">
-            <h1 className="text-2xl font-semibold">
-              Hi, Latif Tondossama
-            </h1>
+            <h1 className="text-2xl font-semibold">Hi, Latif Tondossama</h1>
             <a
-              href="https://payemoiunverre.com/superlatif"
+              href="https://Offremoiunverre.com/superlatif"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:underline text-sm"
             >
-              payemoiunverre.com/superlatif
+              Offremoiunverre.com/superlatif
             </a>
           </div>
         </div>
