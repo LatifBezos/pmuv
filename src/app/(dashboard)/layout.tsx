@@ -11,13 +11,18 @@ import {
 import { ProfileFloatButton } from "@/layout/dashboard/ui/profile-float-button";
 import { DashboardSidebar } from "@/layout/dashboard/ui/sections/sidebar/dashboard-sidebar";
 import { useEffect, useState } from "react";
+import type { User } from "@supabase/supabase-js";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function DashboardMainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
+  const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchSession = async () => {
@@ -26,15 +31,25 @@ export default function DashboardMainLayout({
         data: { session },
       } = await supabase.auth.getSession();
       if (session) {
-        console.log("sess", session);
-        const user = session.user;
-        console.log(user.id);
-        console.log(user.email);
-        console.log(user.user_metadata);
+        setUser(session.user);
+        setIsCheckingSession(false);
+        return;
       }
+
+      router.replace(`/login?next=${encodeURIComponent(pathname)}`);
     };
     fetchSession();
-  }, []);
+  }, [pathname, router]);
+
+  if (isCheckingSession) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <p className="text-sm font-medium text-muted-foreground">
+          Vérification de la session...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider>
@@ -48,7 +63,7 @@ export default function DashboardMainLayout({
               className="mx-2 h-4 hidden sm:block"
             />
             <div className="font-medium text-sm sm:text-base">
-              Offremoiunverre
+              {user?.email ?? "Offremoiunverre"}
             </div>
           </div>
         </header>

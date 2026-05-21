@@ -1,11 +1,35 @@
+"use client";
+
 import { Creators } from "@/types";
+import { useMemo, useState } from "react";
 
 export default function CreatorSection({ creator }: { creator: Creators }) {
-  const messages = [
-    { name: "Alice", text: "Bravo pour ton travail 👏" },
-    { name: "Bob", text: "Un verre pour te soutenir 🍻" },
-    { name: "Clara", text: "Merci pour ton contenu 🙌" },
-  ];
+  const [selectedGlasses, setSelectedGlasses] = useState(1);
+  const [supporterName, setSupporterName] = useState("");
+  const [message, setMessage] = useState("");
+  const [localMessages, setLocalMessages] = useState<
+    { name: string; text: string; glasses: number }[]
+  >([]);
+  const pricePerGlass = 1200;
+  const total = useMemo(
+    () => selectedGlasses * pricePerGlass,
+    [selectedGlasses]
+  );
+
+  const handleSupport = () => {
+    if (!message.trim() && !supporterName.trim()) return;
+
+    setLocalMessages((messages) => [
+      {
+        name: supporterName.trim() || "Supporter anonyme",
+        text: message.trim() || `${selectedGlasses} verre(s) offert(s)`,
+        glasses: selectedGlasses,
+      },
+      ...messages,
+    ]);
+    setSupporterName("");
+    setMessage("");
+  };
 
   return (
     <div
@@ -42,38 +66,59 @@ export default function CreatorSection({ creator }: { creator: Creators }) {
             {["1", "3", "5", "10"].map((n) => (
               <button
                 key={n}
-                className="px-4 py-2 border border-black font-semibold hover:bg-black hover:text-white transition"
+                className="px-4 py-2 border border-black font-semibold hover:bg-black hover:text-white transition data-[selected=true]:bg-black data-[selected=true]:text-white"
+                data-selected={selectedGlasses === Number(n)}
+                onClick={() => setSelectedGlasses(Number(n))}
               >
                 {n} VERRE{n !== "1" && "S"}
               </button>
             ))}
           </div>
+          <p className="mb-4 font-semibold">
+            Total estimé : {total.toLocaleString("fr-FR")} FCFA
+          </p>
 
           {/* Champs utilisateur */}
           <input
             type="text"
             placeholder="Nom ou @votresocial"
+            value={supporterName}
+            onChange={(event) => setSupporterName(event.target.value)}
             className="w-full border border-black px-3 py-2 mb-2 focus:outline-none"
           />
           <textarea
             placeholder="Dites quelque chose de gentil..."
+            value={message}
+            onChange={(event) => setMessage(event.target.value)}
             className="w-full border border-black px-3 py-2 focus:outline-none"
           />
 
           <button
             className="bg-black font-bold py-3 px-6 text-lg hover:text-white transition mt-4"
             style={{ color: `${creator.color}` }}
+            onClick={handleSupport}
           >
-            Paye un verre
+            Préparer {selectedGlasses} verre{selectedGlasses > 1 ? "s" : ""}
           </button>
+          <p className="mt-2 text-sm">
+            Le paiement réel sera branché lors de l'intégration paiement.
+          </p>
         </div>
 
         <div className="mt-8 border-t border-black pt-4">
           <h2 className="text-xl font-bold mb-2">Messages des supporters</h2>
           <div className="space-y-3 max-h-60 overflow-y-auto scrollbar-hide">
-            {messages.map((msg, idx) => (
+            {localMessages.length === 0 && (
+              <p className="text-sm">
+                Aucun message supporter n'est encore disponible.
+              </p>
+            )}
+            {localMessages.map((msg, idx) => (
               <div key={idx} className="border border-black p-3 bg-white/40">
-                <p className="font-bold">{msg.name}</p>
+                <p className="font-bold">
+                  {msg.name} a préparé {msg.glasses} verre
+                  {msg.glasses > 1 ? "s" : ""}
+                </p>
                 <p>{msg.text}</p>
               </div>
             ))}

@@ -8,7 +8,9 @@ import {
 import { MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import {logOut} from "@/hooks/auth0"
+import { logOut } from "@/hooks/auth0";
+import createClient from "@/utils/supabase/client";
+import { useEffect, useState } from "react";
 
 interface ProfileFloatButtonProps
   extends React.HTMLAttributes<HTMLDivElement> {}
@@ -17,6 +19,37 @@ export function ProfileFloatButton({
   className,
   ...props
 }: ProfileFloatButtonProps) {
+  const [creatorSlug, setCreatorSlug] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadCreatorSlug() {
+      const supabase = createClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session?.user) return;
+
+      const { data, error } = await supabase
+        .from("creators")
+        .select("slug")
+        .eq("user_id", session.user.id)
+        .maybeSingle();
+
+      if (!error && isMounted) {
+        setCreatorSlug(data?.slug ?? null);
+      }
+    }
+
+    loadCreatorSlug();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   return (
     <div className={cn("fixed bottom-4 right-4 z-10", className)} {...props}>
       <DropdownMenu>
@@ -31,9 +64,19 @@ export function ProfileFloatButton({
           className="w-48 sm:w-56 space-y-2 py-4 px-2"
         >
           <DropdownMenuItem>
-            <Link href="/dashboard/profile" className="font-bold w-full">
-              View my page
-            </Link>
+            {creatorSlug ? (
+              <Link
+                href={`/creator/${creatorSlug}`}
+                className="font-bold w-full"
+                target="_blank"
+              >
+                View my page
+              </Link>
+            ) : (
+              <span className="font-bold text-muted-foreground">
+                Page non configurée
+              </span>
+            )}
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Link href="/dashboard" className="font-bold w-full">
@@ -41,9 +84,9 @@ export function ProfileFloatButton({
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Link href="/dashboard/settings" className="w-full">
-              My account
-            </Link>
+            <span className="w-full text-muted-foreground">
+              My account bientôt disponible
+            </span>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <button onClick={logOut} className="cursor-pointer">

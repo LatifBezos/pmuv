@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { Events } from "@/types";
 import { BeerIcon } from "lucide-react";
 
@@ -18,9 +16,8 @@ export function EventsAll({ events }: EventsAllProps) {
     {/* Grille avec 12 colonnes et lignes automatiques */}
     <div className="grid grid-cols-12 auto-rows-[16rem] gap-6 mt-6">
       {events.map((event, index) => (
-        <Link
+        <article
           key={index}
-          href={`/creator/${event.slug}`}
           className={`block relative group ${
             index === 0 ? "col-span-6 row-span-2 h-[32rem]" : "col-span-3 h-[16rem]"
           }`}
@@ -31,12 +28,15 @@ export function EventsAll({ events }: EventsAllProps) {
               alt={event.slug}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
-            <div className="absolute inset-0 flex flex-col justify-center items-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <div className="absolute inset-0 flex flex-col justify-center items-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center px-4">
               <BeerIcon className="size-8 text-white rotate-12 mb-2" />
-              <p className="text-2xl text-white font-bold">{event.slug}</p>
+              <p className="text-2xl text-white font-bold">{event.title}</p>
+              <p className="text-sm text-white/80">
+                Page événement bientôt disponible
+              </p>
             </div>
           </div>
-        </Link>
+        </article>
       ))}
     </div>
   </div>

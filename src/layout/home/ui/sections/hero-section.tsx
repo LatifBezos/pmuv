@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MoveRight, PhoneCall } from "lucide-react";
+import Link from "next/link";
 
 function HeroSection() {
   return (
@@ -22,14 +23,19 @@ function HeroSection() {
             </div>
             <div className="flex flex-row gap-4">
               <Button
+                asChild
                 size="lg"
                 className="gap-4 cursor-pointer"
                 variant="outline"
               >
-                Demander une info <PhoneCall className="w-4 h-4" />
+                <Link href="/#comment-ca-marche">
+                  Demander une info <PhoneCall className="w-4 h-4" />
+                </Link>
               </Button>
-              <Button size="lg" className="gap-4 cursor-pointer">
-                S'inscrire ici <MoveRight className="w-4 h-4" />
+              <Button asChild size="lg" className="gap-4 cursor-pointer">
+                <Link href="/signup">
+                  S'inscrire ici <MoveRight className="w-4 h-4" />
+                </Link>
               </Button>
             </div>
           </div>

@@ -1,30 +1,73 @@
 "use client";
 
 import Link from "next/link";
-import {authSign, authConnect, authGoogle, authFB} from "@/hooks/auth0";
+import { authConnect, authGoogle, authFB } from "@/hooks/auth0";
 import { BeerIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import createClient from "@/utils/supabase/client";
 
 
 export default function LoginPage() {
-  const [email,setEmail] = useState("")
-  const [pass,setPass] = useState("")
+  const [email, setEmail] = useState("");
+  const [pass, setPass] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [nextPath, setNextPath] = useState("/dashboard");
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const next = params.get("next");
+    const safeNext = next?.startsWith("/") ? next : "/dashboard";
+    setNextPath(safeNext);
+
+    async function redirectAuthenticatedUser() {
+      const supabase = createClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        window.location.href = safeNext;
+      }
+    }
+
+    redirectAuthenticatedUser();
+  }, []);
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
-    console.log("email",value)
-  }
+    setEmail(value);
+    setError(null);
+  };
 
   const handlePass = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
-    console.log("password",value)
-  }
+    const value = e.target.value;
+    setPass(value);
+    setError(null);
+  };
 
-  const signUp = async () => {
-    const result = await authConnect(email, pass);
-    console.log("résult", result);
-  }
+  const signIn = async () => {
+    setIsSubmitting(true);
+    setError(null);
+    const result = await authConnect(email, pass, nextPath);
+    if (result.error) {
+      setError(result.error);
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleOAuth = async (provider: "google" | "facebook") => {
+    setError(null);
+    const result =
+      provider === "google"
+        ? await authGoogle(nextPath)
+        : await authFB(nextPath);
+
+    if (result.error) {
+      setError(result.error);
+    }
+  };
 
 
   return (
@@ -48,20 +91,35 @@ export default function LoginPage() {
               <input 
                 type="text"
                 placeholder="email"
+                value={email}
                 onChange={handleEmail}
                 className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-black placeholder-black w-full text-center"
               />
               <input 
                 type="password"
                 placeholder="password"
+                value={pass}
                 onChange={handlePass}
                 className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-black placeholder-black w-full text-center"
               />
-              <button className="bg-blue-200 text-black font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition mb-4 cursor-pointer"
-                onClick={signUp}
+              {error && (
+                <p className="text-sm font-medium text-red-600 text-center">
+                  {error}
+                </p>
+              )}
+              <button
+                className="bg-blue-200 text-black font-bold py-2 px-4 rounded-lg hover:bg-gray-200 transition mb-4 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
+                disabled={!email || !pass || isSubmitting}
+                onClick={signIn}
               >
-                Créer mon compte
+                {isSubmitting ? "Connexion..." : "Se connecter"}
               </button>
+              <Link
+                href="/reset-password"
+                className="text-center text-sm font-bold text-black underline"
+              >
+                Mot de passe oublié ?
+              </Link>
         </div>
 
         <div className="flex items-center my-5 justify-center w-full max-w-sm space-x-4">
@@ -75,7 +133,7 @@ export default function LoginPage() {
         <div className="flex flex-col w-full max-w-sm space-y-4">
           {/* Google */}
           <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg border border-2 border-black hover:bg-gray-200 transition p-12 cursor-pointer"
-            onClick={() => authGoogle()}
+            onClick={() => handleOAuth("google")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +178,7 @@ export default function LoginPage() {
 
           {/* Facebook */}
           <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg border border-2 border-black hover:bg-gray-200 transition cursor-pointer"
-            onClick={() => authFB()}
+            onClick={() => handleOAuth("facebook")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -145,7 +203,10 @@ export default function LoginPage() {
           </button>
 
           {/* LinkedIn */}
-          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg border border-2 border-black hover:bg-gray-200 transition">
+          <button
+            className="flex items-center justify-center bg-white px-4 py-2 rounded-lg border border-2 border-black transition disabled:cursor-not-allowed disabled:opacity-60"
+            disabled
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
@@ -169,7 +230,7 @@ export default function LoginPage() {
                 0 22.225 0z"
               />
             </svg>
-            Se connecter avec LinkedIn
+            LinkedIn bientôt disponible
           </button>
         </div>
 

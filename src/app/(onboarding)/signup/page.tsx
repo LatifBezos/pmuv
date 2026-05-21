@@ -5,7 +5,8 @@ import { cn } from "@/lib/utils";
 import { slugSearch } from "@/utils/supabase/queries";
 import { BeerIcon, CircleCheck, LoaderCircle, X } from "lucide-react";
 import Link from "next/link";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import createClient from "@/utils/supabase/client";
 
 export default function SignupPage() {
   const [loading, setLoading] = useState(false);
@@ -17,29 +18,50 @@ export default function SignupPage() {
 
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    async function redirectAuthenticatedUser() {
+      const supabase = createClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (session) {
+        window.location.href = "/dashboard";
+      }
+    }
+
+    redirectAuthenticatedUser();
+  }, []);
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
     setEmail(value);
-    console.log("email", value);
+    setAuthError(null);
   };
 
   const handlePass = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
+    const value = e.target.value;
     setPass(value);
-    console.log("password", value);
+    setAuthError(null);
   };
 
   const signUp = async () => {
-    const result = await authSign(email, pass);
-    console.log("résult auth", result);
+    setIsSubmitting(true);
+    setAuthError(null);
+    const result = await authSign(email, pass, slug);
+    if (result.error) {
+      setAuthError(result.error);
+      setIsSubmitting(false);
+    }
   };
 
   const userTap = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trim();
 
     setSlug(value);
-    console.log("mon slug", slug);
     setLoading(true);
 
     if (typingTimeout.current) {
@@ -55,8 +77,6 @@ export default function SignupPage() {
 
       const result = await slugSearch(value);
 
-      console.log("result", result);
-
       if (result === true) {
         setSlugValid(false);
       } else {
@@ -65,6 +85,20 @@ export default function SignupPage() {
 
       setLoading(false);
     }, 500);
+  };
+
+  const handleOAuth = async (provider: "google" | "facebook") => {
+    if (slugValid !== true) return;
+
+    setAuthError(null);
+    window.localStorage.setItem("pendingCreatorSlug", slug);
+    const result =
+      provider === "google" ? await authGoogle() : await authFB();
+
+    if (result.error) {
+      window.localStorage.removeItem("pendingCreatorSlug");
+      setAuthError(result.error);
+    }
   };
 
   return (
@@ -121,7 +155,8 @@ export default function SignupPage() {
 
           <div className="flex flex-col w-full max-w-xs">
             <button
-              className="bg-white text-blue-300 font-bold py-2 px-4 rounded-lg border border-2 border-blue-300 hover:bg-blue-300 hover:text-black hover:cursor-pointer transition mb-4"
+              className="bg-white text-blue-300 font-bold py-2 px-4 rounded-lg border border-2 border-blue-300 hover:bg-blue-300 hover:text-black hover:cursor-pointer transition mb-4 disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={slugValid !== true}
               onClick={() => setShowConnect(true)}
             >
               Créer mon compte
@@ -148,20 +183,28 @@ export default function SignupPage() {
             <input
               type="text"
               placeholder="email"
+              value={email}
               onChange={handleEmail}
               className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-black placeholder-black w-full text-center"
             />
             <input
               type="password"
               placeholder="password"
+              value={pass}
               onChange={handlePass}
               className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-black placeholder-black w-full text-center"
             />
+            {authError && (
+              <p className="text-sm font-medium text-red-600 text-center">
+                {authError}
+              </p>
+            )}
             <button
-              className="bg-blue-200 text-black border border-2 border-blue-400 font-bold py-2 px-4 rounded-lg hover:bg-blue-200 transition mb-4 cursor-pointer"
+              className="bg-blue-200 text-black border border-2 border-blue-400 font-bold py-2 px-4 rounded-lg hover:bg-blue-200 transition mb-4 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={!email || !pass || slugValid !== true || isSubmitting}
               onClick={signUp}
             >
-              S'inscrire
+              {isSubmitting ? "Inscription..." : "S'inscrire"}
             </button>
           </div>
 
@@ -175,8 +218,9 @@ export default function SignupPage() {
           <div className="flex flex-col w-full max-w-sm space-y-4">
             {/* Google */}
             <button
-              className="flex items-center justify-center text-black bg-white px-4 py-2 rounded-lg border border-2 border-black  hover:bg-gray-800 transition p-12 cursor-pointer"
-              onClick={() => authGoogle()}
+              className="flex items-center justify-center text-black bg-white px-4 py-2 rounded-lg border border-2 border-black  hover:bg-gray-800 transition p-12 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={slugValid !== true}
+              onClick={() => handleOAuth("google")}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -221,8 +265,9 @@ export default function SignupPage() {
 
             {/* Facebook */}
             <button
-              className="flex items-center justify-center text-black bg-white px-4 py-2 rounded-lg border border-2 border-black hover:bg-gray-800 transition cursor-pointer"
-              onClick={() => authFB()}
+              className="flex items-center justify-center text-black bg-white px-4 py-2 rounded-lg border border-2 border-black hover:bg-gray-800 transition cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
+              disabled={slugValid !== true}
+              onClick={() => handleOAuth("facebook")}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -247,7 +292,10 @@ export default function SignupPage() {
             </button>
 
             {/* LinkedIn */}
-            <button className="flex items-center justify-center text-black bg-white px-4 py-2 rounded-lg border border-2 border-black  hover:bg-gray-800 transition">
+            <button
+              className="flex items-center justify-center text-black bg-white px-4 py-2 rounded-lg border border-2 border-black transition disabled:cursor-not-allowed disabled:opacity-60"
+              disabled
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
@@ -271,7 +319,7 @@ export default function SignupPage() {
                 0 22.225 0z"
                 />
               </svg>
-              Se connecter avec LinkedIn
+              LinkedIn bientôt disponible
             </button>
           </div>
 

@@ -47,36 +47,33 @@ function Footer() {
             <BeerIcon className="size-10 text-white rotate-12 transition-all duration-200" />
           </div>
           <nav className="mb-8 flex flex-wrap justify-center gap-6">
-            <Link href="#" className="text-white">
+            <Link href="/" className="text-white">
               Accueil
             </Link>
-            <Link href="#" className="text-white">
+            <Link href="/#comment-ca-marche" className="text-white">
               Comment ça marche ?
             </Link>
-            <Link href="#" className="text-white">
+            <Link href="/projects" className="text-white">
               Nos projets
             </Link>
-            <Link href="#" className="text-white">
-              Contact
-            </Link>
-            <Link href="#" className="text-white">
-              Contact
+            <Link href="/creators" className="text-white">
+              Créateurs
             </Link>
           </nav>
           <div className="mb-8 flex space-x-4">
-            <Button variant="outline" size="icon" className="rounded-full">
+            <Button variant="outline" size="icon" className="rounded-full" disabled>
               <IconFacebook className="h-4 w-4" />
               <span className="sr-only">Facebook</span>
             </Button>
-            <Button variant="outline" size="icon" className="rounded-full">
+            <Button variant="outline" size="icon" className="rounded-full" disabled>
               <IconX className="h-4 w-4" />
               <span className="sr-only">X (Twitter)</span>
             </Button>
-            <Button variant="outline" size="icon" className="rounded-full">
+            <Button variant="outline" size="icon" className="rounded-full" disabled>
               <IconInstagram className="h-4 w-4" />
               <span className="sr-only">Instagram</span>
             </Button>
-            <Button variant="outline" size="icon" className="rounded-full">
+            <Button variant="outline" size="icon" className="rounded-full" disabled>
               <IconLinkedIn className="h-4 w-4" />
               <span className="sr-only">LinkedIn</span>
             </Button>
@@ -92,10 +89,11 @@ function Footer() {
                   placeholder="Enter your email"
                   type="email"
                   className="rounded-full"
+                  disabled
                 />
               </div>
-              <Button type="submit" className="rounded-full">
-                Subscribe
+              <Button type="button" className="rounded-full" disabled>
+                Bientôt
               </Button>
             </form>
           </div>
