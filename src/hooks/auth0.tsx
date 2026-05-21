@@ -1,17 +1,16 @@
-import { createClient, type Provider, type User } from "@supabase/supabase-js";
+import type { Provider, User } from "@supabase/supabase-js";
+import createClient from "@/utils/supabase/client";
 
 export function getSupabase() {
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    throw new Error("Missing Supabase env variables");
-  }
-
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
+  return createClient();
 }
 
 const DEFAULT_CREATOR_COLOR = "#40916c";
+
+export function getCreatorSlugFromUser(user: User) {
+  const slug = user.user_metadata?.slug;
+  return typeof slug === "string" && slug.length > 0 ? slug : null;
+}
 
 function getRedirectUrl(path = "/dashboard") {
   if (typeof window === "undefined") {
@@ -28,7 +27,7 @@ export async function ensureCreatorProfile(user: User, slug?: string) {
   const { data: existingCreator, error: existingError } = await supabase
     .from("creators")
     .select("id")
-    .eq("user_id", user.id)
+    .eq("slug", slug)
     .maybeSingle();
 
   if (existingError) {
@@ -38,7 +37,6 @@ export async function ensureCreatorProfile(user: User, slug?: string) {
   if (existingCreator) return null;
 
   const { error } = await supabase.from("creators").insert({
-    user_id: user.id,
     slug,
     color: DEFAULT_CREATOR_COLOR,
   });
@@ -60,6 +58,9 @@ export async function authSign(
       data: {
         slug,
       },
+      emailRedirectTo: getRedirectUrl(
+        `/auth/callback?next=${encodeURIComponent(redirectPath)}`
+      ),
     },
   });
   if (error) {

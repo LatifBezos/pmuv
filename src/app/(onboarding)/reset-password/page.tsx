@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { requestPasswordReset } from "@/hooks/auth0";
+import { Button } from "@/components/ui/button";
+import { AuthField } from "../_components/auth-field";
 
 export default function ResetPasswordPage() {
   const [email, setEmail] = useState("");
@@ -36,23 +38,36 @@ export default function ResetPasswordPage() {
             Entrez votre email pour recevoir un lien de réinitialisation.
           </p>
         </div>
-        <input
+        <AuthField
+          id="reset-password-email"
           type="email"
-          placeholder="email"
+          label="Email"
+          placeholder="vous@exemple.com"
           value={email}
           onChange={(event) => setEmail(event.target.value.trim())}
-          className="rounded-lg border-2 px-4 py-2 text-center text-black placeholder-black"
+          disabled={isSubmitting}
+          error={Boolean(error)}
+          autoComplete="email"
+          aria-describedby={error ? "reset-password-error" : feedback ? "reset-password-feedback" : undefined}
         />
-        {error && <p className="text-sm font-medium text-red-600">{error}</p>}
-        {feedback && <p className="text-sm font-medium text-green-700">{feedback}</p>}
-        <button
-          className="rounded-lg bg-blue-200 px-4 py-2 font-bold text-black transition hover:bg-gray-200 disabled:cursor-not-allowed disabled:opacity-60"
+        {error && (
+          <p id="reset-password-error" role="alert" className="text-sm font-medium text-destructive">
+            {error}
+          </p>
+        )}
+        {feedback && (
+          <p id="reset-password-feedback" className="text-sm font-medium text-green-700">
+            {feedback}
+          </p>
+        )}
+        <Button
+          className="h-11 rounded-xl font-semibold"
           disabled={!email || isSubmitting}
           onClick={handleSubmit}
         >
           {isSubmitting ? "Envoi..." : "Envoyer le lien"}
-        </button>
-        <Link href="/login" className="text-center text-sm font-bold underline">
+        </Button>
+        <Link href="/login" className="text-center text-sm font-bold underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
           Retour à la connexion
         </Link>
       </div>

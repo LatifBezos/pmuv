@@ -11,7 +11,6 @@ export interface Users {
 
 export interface Creators {
     id : string,
-    user_id: string,
     bio : string,
     social_links : string,
     slug : string,
@@ -70,13 +69,11 @@ export interface WalletTransactions {
     amount : number,
     payment_method_id : string,
     status : string,
-    wallet_id : string,
     created_at : string,
 }
 
 export interface Wallet {
     id : string,
-    user_id: string,
     balance : number,
     updated_at : string,
     created_at : string,

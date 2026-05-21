@@ -7,6 +7,11 @@ import { BeerIcon, CircleCheck, LoaderCircle, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import createClient from "@/utils/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { AuthField } from "../_components/auth-field";
 
 export default function SignupPage() {
   const [loading, setLoading] = useState(false);
@@ -63,6 +68,7 @@ export default function SignupPage() {
 
     setSlug(value);
     setLoading(true);
+    setSlugValid(null);
 
     if (typingTimeout.current) {
       clearTimeout(typingTimeout.current);
@@ -130,37 +136,64 @@ export default function SignupPage() {
             Choisissez un [Slug] pour votre page.
           </p>
 
-          <div className="flex items-start py-2 px-2 border border-2 rounded-md mb-4 w-full max-w-xs justify-center">
-            <p className="text-black basis-1/2">Offremoiunverre.com/</p>
-            <div className="flex items-center justify-between w-32 basis-1/2">
-              <input
+          <div className="flex w-full max-w-sm flex-col gap-2">
+            <Label htmlFor="signup-slug" className="text-left text-sm font-semibold text-foreground">
+              Adresse publique
+            </Label>
+            <div className="flex h-12 items-center rounded-xl border border-border bg-white px-4 shadow-sm transition-all focus-within:border-primary focus-within:ring-[3px] focus-within:ring-primary/20">
+              <span className="shrink-0 text-sm text-muted-foreground">
+                offremoiunverre.com/
+              </span>
+              <Input
+                id="signup-slug"
                 type="text"
                 placeholder="votre_slug"
-                className="outline-none text-black placeholder-black w-32"
+                value={slug}
+                aria-invalid={slugValid === false || undefined}
+                aria-describedby="signup-slug-help signup-slug-status"
+                autoComplete="username"
+                className="h-auto border-0 bg-transparent px-1 py-0 text-left shadow-none focus-visible:border-transparent focus-visible:ring-0"
                 onChange={userTap}
               />
-              <div>
+              <div className="flex size-5 shrink-0 items-center justify-center" aria-live="polite">
                 {loading && (
-                  <LoaderCircle className="w-5 h-5 animate-spin text-white" />
+                  <LoaderCircle
+                    aria-hidden="true"
+                    className="size-5 animate-spin text-muted-foreground"
+                  />
                 )}
                 {!loading && slugValid === true && (
-                  <CircleCheck className="w-5 h-5 text-white" />
+                  <CircleCheck aria-hidden="true" className="size-5 text-green-700" />
                 )}
                 {!loading && slugValid === false && (
-                  <X className="w-5 h-5 text-red-500" />
+                  <X aria-hidden="true" className="size-5 text-destructive" />
                 )}
               </div>
             </div>
+            <p id="signup-slug-help" className="text-left text-xs text-muted-foreground">
+              Utilisez un slug court, lisible et sans espace.
+            </p>
+            {!loading && slugValid === true && (
+              <p id="signup-slug-status" className="text-left text-xs font-medium text-green-700">
+                Ce slug est disponible.
+              </p>
+            )}
+            {!loading && slugValid === false && (
+              <p id="signup-slug-status" role="alert" className="text-left text-xs font-medium text-destructive">
+                Ce slug est déjà utilisé.
+              </p>
+            )}
           </div>
 
-          <div className="flex flex-col w-full max-w-xs">
-            <button
-              className="bg-white text-blue-300 font-bold py-2 px-4 rounded-lg border border-2 border-blue-300 hover:bg-blue-300 hover:text-black hover:cursor-pointer transition mb-4 disabled:cursor-not-allowed disabled:opacity-60"
-              disabled={slugValid !== true}
+          <div className="flex w-full max-w-sm flex-col">
+            <Button
+              variant="outline"
+              className="h-11 rounded-xl font-semibold"
+              disabled={loading || slugValid !== true}
               onClick={() => setShowConnect(true)}
             >
               Créer mon compte
-            </button>
+            </Button>
           </div>
 
           <div className="flex items-center mt-6 text-black text-center">
@@ -179,39 +212,49 @@ export default function SignupPage() {
           </h1>
 
           {/* Section connect */}
-          <div className="flex flex-col w-full max-w-sm space-y-4">
-            <input
-              type="text"
-              placeholder="email"
+          <div className="flex w-full max-w-sm flex-col gap-4">
+            <AuthField
+              id="signup-email"
+              type="email"
+              label="Email"
+              placeholder="vous@exemple.com"
               value={email}
               onChange={handleEmail}
-              className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-black placeholder-black w-full text-center"
+              disabled={isSubmitting}
+              error={Boolean(authError)}
+              autoComplete="email"
+              aria-describedby={authError ? "signup-auth-error" : undefined}
             />
-            <input
+            <AuthField
+              id="signup-password"
               type="password"
-              placeholder="password"
+              label="Mot de passe"
+              placeholder="Créez un mot de passe"
               value={pass}
               onChange={handlePass}
-              className="flex border border-2 px-4 py-2 rounded-lg mb-4 items-center align-items text-black placeholder-black w-full text-center"
+              disabled={isSubmitting}
+              error={Boolean(authError)}
+              autoComplete="new-password"
+              aria-describedby={authError ? "signup-auth-error" : undefined}
             />
             {authError && (
-              <p className="text-sm font-medium text-red-600 text-center">
+              <p id="signup-auth-error" role="alert" className="text-left text-sm font-medium text-destructive">
                 {authError}
               </p>
             )}
-            <button
-              className="bg-blue-200 text-black border border-2 border-blue-400 font-bold py-2 px-4 rounded-lg hover:bg-blue-200 transition mb-4 cursor-pointer disabled:cursor-not-allowed disabled:opacity-60"
+            <Button
+              className="h-11 rounded-xl font-semibold"
               disabled={!email || !pass || slugValid !== true || isSubmitting}
               onClick={signUp}
             >
               {isSubmitting ? "Inscription..." : "S'inscrire"}
-            </button>
+            </Button>
           </div>
 
-          <div className="flex items-center my-5 justify-center w-full max-w-sm space-x-4">
-            <span className="w-full h-0.5 bg-black"></span>
-            <p className="text-lg text-black mb-1">ou</p>
-            <span className="w-full h-0.5 bg-black"></span>
+          <div className="flex items-center justify-center gap-4 my-5 w-full max-w-sm">
+            <Separator className="flex-1" />
+            <p className="text-sm text-muted-foreground">ou</p>
+            <Separator className="flex-1" />
           </div>
 
           {/* Boutons sociaux */}

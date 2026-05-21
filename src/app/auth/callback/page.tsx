@@ -6,26 +6,73 @@ import { useEffect, useState } from "react";
 
 import { ensureCreatorProfile, getSupabase } from "@/hooks/auth0";
 
+function getSafeNext(searchParams: URLSearchParams) {
+  const next = searchParams.get("next") || "/dashboard";
+  return next.startsWith("/") ? next : "/dashboard";
+}
+
+function getHashParams() {
+  return new URLSearchParams(window.location.hash.replace(/^#/, ""));
+}
+
 export default function AuthCallbackPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function exchangeCode() {
+    async function completeAuthCallback() {
       const searchParams = new URLSearchParams(window.location.search);
+      const hashParams = getHashParams();
       const code = searchParams.get("code");
-      const next = searchParams.get("next") || "/dashboard";
+      const next = getSafeNext(searchParams);
+      const callbackError =
+        searchParams.get("error_description") ||
+        searchParams.get("error") ||
+        hashParams.get("error_description") ||
+        hashParams.get("error");
+      const supabase = getSupabase();
 
-      if (!code) {
-        setError("Le code de connexion est manquant.");
+      if (callbackError) {
+        setError(callbackError);
         return;
       }
 
-      const supabase = getSupabase();
-      const { error } = await supabase.auth.exchangeCodeForSession(code);
+      if (code) {
+        const { error } = await supabase.auth.exchangeCodeForSession(code);
 
-      if (error) {
-        setError(error.message);
+        if (error) {
+          const {
+            data: { session },
+          } = await supabase.auth.getSession();
+
+          if (!session) {
+            setError(error.message);
+            return;
+          }
+        }
+      } else {
+        const accessToken = hashParams.get("access_token");
+        const refreshToken = hashParams.get("refresh_token");
+
+        if (accessToken && refreshToken) {
+          const { error } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          });
+
+          if (error) {
+            setError(error.message);
+            return;
+          }
+        }
+      }
+
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (!session) {
+        setError("La session de connexion est introuvable. Veuillez réessayer.");
         return;
       }
 
@@ -52,10 +99,10 @@ export default function AuthCallbackPage() {
         window.localStorage.removeItem("pendingCreatorSlug");
       }
 
-      router.replace(next.startsWith("/") ? next : "/dashboard");
+      router.replace(next);
     }
 
-    exchangeCode();
+    completeAuthCallback();
   }, [router]);
 
   return (

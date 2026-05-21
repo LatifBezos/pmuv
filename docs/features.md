@@ -76,7 +76,7 @@
 | Callback OAuth | `/auth/callback` | ✅ | Callback client + `exchangeCodeForSession` + redirection `next` |
 | Déconnexion | `profile-float-button.tsx` | ✅ | `logOut()` → `signOut` + redirect `/` |
 | Protection routes dashboard | `(dashboard)/layout.tsx` | ✅ | Garde serveur : redirection `/login?next=/dashboard` sans session |
-| Liaison `auth.users` ↔ `creators` | `auth0.tsx` | 🟡 | Création minimale depuis le slug ; enrichissement profil encore à faire |
+| Liaison Auth ↔ `creators` | `auth0.tsx` | 🟡 | Mapping temporaire via `user_metadata.slug` + `creators.slug` ; pas de FK `creators.user_id` dans le schéma actuel |
 | Validation email | — | 🔜 | Non géré côté UI |
 | Réinitialisation mot de passe | `/reset-password`, `/update-password` | ✅ | Flux reset + mise à jour du mot de passe |
 
@@ -87,22 +87,75 @@
 | Fonctionnalité | Route | Statut | Détail |
 |----------------|-------|--------|--------|
 | Layout dashboard + sidebar | `/dashboard/*` | ✅ | Sidebar, header, menu flottant profil |
-| Overview / accueil dashboard | `/dashboard` | 🟡 | UI complète ; données session/créateur/wallet/transactions chargées quand disponibles |
-| Bannière configuration payout | `dashboard/page.tsx` | 🟡 | Affichée seulement si pertinent ; action désactivée tant que settings/payout absent |
-| Section profil créateur | `profile-section.tsx` | 🟡 | Données créateur/session dynamiques ; enrichissement profil encore limité |
-| Section revenus (Earnings) | `profile-section.tsx` | 🟡 | Solde wallet et total supporters lus quand disponibles |
+| Overview / accueil dashboard | `/dashboard` | ✅ | UI complète ; session, créateur par slug et transactions chargés avec fallback propre si profil absent |
+| Bannière configuration payout | `dashboard/page.tsx` | 🟡 | Affichée pour les créateurs ; action désactivée tant que le module payout reste hors scope |
+| Section profil créateur | `profile-section.tsx` | ✅ | Données créateur/session dynamiques ; édition du profil et upload avatar via `/dashboard/settings` |
+| Section revenus (Earnings) | `profile-section.tsx` | 🟡 | Total calculé depuis `wallet_transactions.creator_id` ; wallet direct non lié au créateur dans le schéma actuel |
 | Section supporters | `supporters-section.tsx` | 🟡 | Lit `wallet_transactions` quand un créateur existe ; dépend encore du paiement réel |
 | Partage de page | `profile-section.tsx` | ✅ | Lien dynamique basé sur le slug créateur |
 | Navigation Overview | `nav-main.tsx` | ✅ | Lien `/dashboard` |
-| Navigation View page | `nav-main.tsx` | 🟡 | Lien dynamique quand le créateur est chargé ; fallback désactivé |
+| Navigation View page | `nav-main.tsx` | ✅ | Lien dynamique vers `/creator/[slug]` quand le profil existe ; entrée désactivée si aucun profil n'est lié |
 | Explore creators | `/dashboard/explore-creators` | ✅ | Liste réelle des créateurs |
 | Nav Monetize (sidebar) | `nav-monetize.tsx` | ❌ | Commenté dans `dashboard-sidebar.tsx` |
-| Payouts (sidebar) | `nav-settings.tsx` | ❌ | Bouton sans `href` ni page |
-| Settings (sidebar) | `nav-settings.tsx` | ❌ | Bouton sans `href` ; `/dashboard/settings` inexistant |
-| Profile (menu flottant) | `/dashboard/profile` | 🔜 | Lien présent, **page absente** |
-| My account | `/dashboard/settings` | 🔜 | Lien présent, **page absente** |
+| Payouts (sidebar) | `nav-settings.tsx` | ❌ | Entrée désactivée ; configuration payout non implémentée |
+| Settings (sidebar) | `nav-settings.tsx` | ✅ | Lien vers `/dashboard/settings` pour personnaliser slug, bio, avatar, couleur et lien principal |
+| Profile (menu flottant) | `/dashboard/profile` | 🔜 | Page absente |
+| Settings (menu flottant) | `/dashboard/settings` | ✅ | Lien vers les paramètres créateur |
 | Session utilisateur (header) | `layout.tsx` | ✅ | Session utilisée pour protéger le dashboard |
 | More ways to earn | `earning-ways-section.tsx` | ❌ | Composant commenté sur dashboard ; liens vers routes inexistantes |
+
+Configuration requise pour l'upload avatar : le service écrit dans `creator-avatars` avec le chemin `<auth.uid()>/<slug>-avatar.<ext>`. Le SQL versionné est disponible dans `supabase/migrations/20260521141500_create_creator_avatars_bucket.sql`. À appliquer côté Supabase si le bucket/policies n'existent pas encore :
+
+```sql
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'creator-avatars',
+  'creator-avatars',
+  true,
+  2097152,
+  array['image/jpeg', 'image/png', 'image/webp']
+)
+on conflict (id) do update set
+  public = excluded.public,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "Creator avatars are publicly readable" on storage.objects;
+create policy "Creator avatars are publicly readable"
+on storage.objects for select
+using (bucket_id = 'creator-avatars');
+
+drop policy if exists "Authenticated users can upload their creator avatar" on storage.objects;
+create policy "Authenticated users can upload their creator avatar"
+on storage.objects for insert
+to authenticated
+with check (
+  bucket_id = 'creator-avatars'
+  and (storage.foldername(name))[1] = auth.uid()::text
+);
+
+drop policy if exists "Authenticated users can replace their creator avatar" on storage.objects;
+create policy "Authenticated users can replace their creator avatar"
+on storage.objects for update
+to authenticated
+using (
+  bucket_id = 'creator-avatars'
+  and (storage.foldername(name))[1] = auth.uid()::text
+)
+with check (
+  bucket_id = 'creator-avatars'
+  and (storage.foldername(name))[1] = auth.uid()::text
+);
+
+drop policy if exists "Authenticated users can delete their creator avatar" on storage.objects;
+create policy "Authenticated users can delete their creator avatar"
+on storage.objects for delete
+to authenticated
+using (
+  bucket_id = 'creator-avatars'
+  and (storage.foldername(name))[1] = auth.uid()::text
+);
+```
 
 ---
 
@@ -122,17 +175,17 @@
 | Fonctionnalité | Statut | Détail |
 |----------------|--------|--------|
 | Schéma `users` | 🟡 | Table custom + Supabase Auth ; pas de sync automatique visible |
-| Schéma `creators` | 🟡 | Lecture OK + création minimale à l'inscription ; édition profil encore absente |
+| Schéma `creators` | 🟡 | Lecture OK + création minimale par slug ; pas de liaison FK directe vers Auth dans le schéma actuel |
 | Schéma `projects` | 🟡 | Lecture seule (`getProjects`) |
 | Schéma `events` | 🟡 | Lecture seule (`getEvents`) |
 | Schéma `catalogues` | 🟡 | Lecture seule (`getCatalogues`) ; pas de page |
-| Schéma `wallet` | 🟡 | Lu côté dashboard ; pas encore alimenté par paiement réel |
+| Schéma `wallet` | 🟡 | Présent mais non requêté côté dashboard tant qu'aucune relation stable avec Auth/créateur n'est disponible |
 | Schéma `wallet_transactions` | 🟡 | Lu côté dashboard ; pas encore écrit par paiement réel |
 | Schéma `payment_methods` | 🔜 | En base ; non utilisé |
 | Champ `kyc_status` (créateurs) | 🔜 | Colonne en base ; pas de flow KYC |
 | Client Supabase browser | `utils/supabase/client.ts` | ✅ | |
 | Client Supabase server | `utils/supabase/server.ts` | 🟡 | Présent ; peu utilisé |
-| Types générés | `database.types.ts` | ✅ | Alignés sur le schéma |
+| Types générés | `database.types.ts` | 🟡 | Ajustés côté app pour retirer `creators.user_id`, à régénérer depuis Supabase quand le schéma source est stabilisé |
 
 ---
 
@@ -141,15 +194,18 @@
 | Fonctionnalité | Statut | Détail |
 |----------------|--------|--------|
 | Calcul prix (FCFA) | 🟡 | 1 200 FCFA/verre dans `payment-box.tsx` uniquement |
-| Intégration Orange Money | 🔜 | Logo marketing seulement |
-| Intégration Wave | 🔜 | Logo marketing seulement |
-| Intégration MTN / Moov | 🔜 | Logo marketing seulement |
+| Service Moneroo serveur | 🟡 | Client HTTP, config env et route `POST /api/payments/moneroo/initialize` ajoutés ; secrets côté serveur uniquement |
+| Intégration Orange Money | 🟡 | Préparable via Moneroo (`orange_ci`, `orange_sn`, etc.) ; non branché UI |
+| Intégration Wave | 🟡 | Préparable via Moneroo (`wave_ci`, `wave_sn`) ; non branché UI |
+| Intégration MTN / Moov | 🟡 | Préparable via Moneroo (`mtn_bj`, `moov_bj`, etc.) ; non branché UI |
 | Intégration Stripe / Visa | 🔜 | Logo marketing seulement |
-| Webhook confirmation paiement | 🔜 | Absent |
+| Webhook confirmation paiement | 🟡 | Route `POST /api/payments/moneroo/webhook` ajoutée avec signature HMAC + re-vérification API ; persistance wallet à finaliser |
 | Enregistrement transaction | 🔜 | `wallet_transactions` jamais alimentée |
 | Mise à jour solde wallet | 🔜 | `wallet` jamais mis à jour |
 | Configuration payout créateur | 🔜 | Bannière UI ; pas de page ni API |
 | Reçu / email confirmation | 🔜 | Absent |
+
+Documentation d'intégration : `docs/payments.md`.
 
 ---
 

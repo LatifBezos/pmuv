@@ -85,30 +85,15 @@ export const getCatalogues = cache(async () => {
     return data;
 });
 
-export const getCreatorByUserId = cache(async (userId: string) => {
+export const getCreatorBySlug = cache(async (slug: string) => {
     const { data, error } = await supabase
         .from('creators')
         .select('*')
-        .eq('user_id', userId)
+        .eq('slug', slug)
         .maybeSingle();
 
     if (error) {
-        console.error('Error fetching creator with this user id:', error);
-        return null;
-    }
-
-    return data;
-});
-
-export const getWalletByUserId = cache(async (userId: string) => {
-    const { data, error } = await supabase
-        .from('wallet')
-        .select('*')
-        .eq('user_id', userId)
-        .maybeSingle();
-
-    if (error) {
-        console.error('Error fetching wallet with this user id:', error);
+        console.error('Error fetching creator with this slug:', error);
         return null;
     }
 

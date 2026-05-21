@@ -71,7 +71,6 @@ export type Database = {
           kyc_status: string | null
           slug: string
           social_links: Json | null
-          user_id: string | null
         }
         Insert: {
           bio?: string | null
@@ -82,7 +81,6 @@ export type Database = {
           kyc_status?: string | null
           slug: string
           social_links?: Json | null
-          user_id?: string | null
         }
         Update: {
           bio?: string | null
@@ -93,17 +91,8 @@ export type Database = {
           kyc_status?: string | null
           slug?: string
           social_links?: Json | null
-          user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "creators_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       events: {
         Row: {
@@ -266,31 +255,20 @@ export type Database = {
           created_at: string
           id: string
           updated_at: string | null
-          user_id: string | null
         }
         Insert: {
           balance?: number | null
           created_at?: string
           id?: string
           updated_at?: string | null
-          user_id?: string | null
         }
         Update: {
           balance?: number | null
           created_at?: string
           id?: string
           updated_at?: string | null
-          user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "wallet_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       wallet_transactions: {
         Row: {

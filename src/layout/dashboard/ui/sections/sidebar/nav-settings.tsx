@@ -1,6 +1,8 @@
 "use client";
 
 import { DollarSign, Settings } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 import {
   SidebarGroup,
@@ -11,11 +13,10 @@ import {
 } from "@/components/ui/sidebar";
 
 export function NavSettings() {
+  const pathname = usePathname();
   const settingsItems = [
-    // { title: "Buttons & Graphics", icon: Palette },
-    // { title: "Integrations", icon: Zap },
-    { title: "Payouts", icon: DollarSign },
-    { title: "Settings", icon: Settings },
+    { title: "Payouts", icon: DollarSign, path: "" },
+    { title: "Settings", icon: Settings, path: "/dashboard/settings" },
   ];
 
   return (
@@ -24,10 +25,22 @@ export function NavSettings() {
       <SidebarMenu>
         {settingsItems.map((item) => (
           <SidebarMenuItem key={item.title}>
-            <SidebarMenuButton className="cursor-pointer pl-6">
-              <item.icon className="h-5 w-5" />
-              <span>{item.title}</span>
-            </SidebarMenuButton>
+            {item.path ? (
+              <Link href={item.path}>
+                <SidebarMenuButton
+                  className="cursor-pointer pl-6"
+                  isActive={pathname === item.path}
+                >
+                  <item.icon className="h-5 w-5" />
+                  <span>{item.title}</span>
+                </SidebarMenuButton>
+              </Link>
+            ) : (
+              <SidebarMenuButton disabled className="pl-6">
+                <item.icon className="h-5 w-5" />
+                <span>{item.title}</span>
+              </SidebarMenuButton>
+            )}
           </SidebarMenuItem>
         ))}
       </SidebarMenu>

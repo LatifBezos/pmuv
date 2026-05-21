@@ -8,7 +8,7 @@ import {
 import { MenuIcon } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import { logOut } from "@/hooks/auth0";
+import { getCreatorSlugFromUser, logOut } from "@/hooks/auth0";
 import createClient from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
 
@@ -31,11 +31,14 @@ export function ProfileFloatButton({
       } = await supabase.auth.getSession();
 
       if (!session?.user) return;
+      const slug = getCreatorSlugFromUser(session.user);
+
+      if (!slug) return;
 
       const { data, error } = await supabase
         .from("creators")
         .select("slug")
-        .eq("user_id", session.user.id)
+        .eq("slug", slug)
         .maybeSingle();
 
       if (!error && isMounted) {
@@ -84,9 +87,9 @@ export function ProfileFloatButton({
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <span className="w-full text-muted-foreground">
-              My account bientôt disponible
-            </span>
+            <Link href="/dashboard/settings" className="font-bold w-full">
+              Settings
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <button onClick={logOut} className="cursor-pointer">

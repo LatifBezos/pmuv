@@ -11,6 +11,7 @@ import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import createClient from "@/utils/supabase/client";
+import { getCreatorSlugFromUser } from "@/hooks/auth0";
 
 export function NavMain() {
   const pathname = usePathname();
@@ -26,11 +27,14 @@ export function NavMain() {
       } = await supabase.auth.getSession();
 
       if (!session?.user) return;
+      const slug = getCreatorSlugFromUser(session.user);
+
+      if (!slug) return;
 
       const { data, error } = await supabase
         .from("creators")
         .select("slug")
-        .eq("user_id", session.user.id)
+        .eq("slug", slug)
         .maybeSingle();
 
       if (!error && isMounted) {

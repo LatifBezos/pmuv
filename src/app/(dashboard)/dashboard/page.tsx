@@ -1,6 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import { ProfileSection } from "@/layout/dashboard/ui/sections/dashboard-section/profile-section";
 import { SupportersSection } from "@/layout/dashboard/ui/sections/dashboard-section/supporters-section";
@@ -8,15 +15,11 @@ import createClient from "@/utils/supabase/client";
 import { Creators, WalletTransactions } from "@/types";
 import type { User } from "@supabase/supabase-js";
 import React, { useEffect, useMemo, useState } from "react";
-
-type Wallet = {
-  balance: number | null;
-};
+import { getCreatorSlugFromUser } from "@/hooks/auth0";
 
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [creator, setCreator] = useState<Creators | null>(null);
-  const [wallet, setWallet] = useState<Wallet | null>(null);
   const [transactions, setTransactions] = useState<WalletTransactions[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,25 +40,23 @@ export default function DashboardPage() {
       }
 
       setUser(session.user);
+      const creatorSlug = getCreatorSlugFromUser(session.user);
+      let creatorData = null;
+      let creatorError = null;
 
-      const { data: creatorData, error: creatorError } = await supabase
-        .from("creators")
-        .select("*")
-        .eq("user_id", session.user.id)
-        .maybeSingle();
+      if (creatorSlug) {
+        const result = await supabase
+          .from("creators")
+          .select("*")
+          .eq("slug", creatorSlug)
+          .maybeSingle();
+
+        creatorData = result.data;
+        creatorError = result.error;
+      }
 
       if (creatorError) {
         console.error("Error fetching dashboard creator:", creatorError);
-      }
-
-      const { data: walletData, error: walletError } = await supabase
-        .from("wallet")
-        .select("balance")
-        .eq("user_id", session.user.id)
-        .maybeSingle();
-
-      if (walletError) {
-        console.error("Error fetching dashboard wallet:", walletError);
       }
 
       const creatorRecord = (creatorData as Creators | null) ?? null;
@@ -78,7 +79,6 @@ export default function DashboardPage() {
       if (!isMounted) return;
 
       setCreator(creatorRecord);
-      setWallet((walletData as Wallet | null) ?? null);
       setTransactions(transactionData);
       setIsLoading(false);
     }
@@ -101,29 +101,40 @@ export default function DashboardPage() {
 
   return (
     <React.Fragment>
-      {!isLoading && creator && !wallet && (
-        <div className="w-full p-3 md:p-4 flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 bg-orange-100">
-          <p className="text-xs sm:text-sm font-bold text-center md:text-left">
-            La configuration payout n'est pas encore disponible dans cette version.
-          </p>
-          <Button
-            className="rounded-full font-bold text-xs sm:text-sm whitespace-nowrap"
-            disabled
-          >
-            Bientôt disponible
-          </Button>
+      {!isLoading && creator && (
+        <div className="border-b bg-amber-50/80 px-4 py-3">
+          <div className="mx-auto flex w-full max-w-4xl flex-col items-center justify-between gap-3 sm:flex-row">
+            <p className="text-center text-sm font-medium text-amber-950 sm:text-left">
+              La configuration payout n'est pas encore disponible dans cette version.
+            </p>
+            <Button variant="outline" className="rounded-full" disabled>
+              Bientôt disponible
+            </Button>
+          </div>
         </div>
       )}
 
       <div className="flex flex-col gap-4 sm:gap-6 w-full max-w-screen md:max-w-4xl mx-auto px-4 sm:px-6 pb-8 py-12 md:py-8">
         {isLoading ? (
-          <div className="bg-white p-6 rounded-xl">Chargement du dashboard...</div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Chargement du dashboard</CardTitle>
+              <CardDescription>
+                Nous récupérons votre session et vos données créateur.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm font-medium text-muted-foreground">
+                Chargement...
+              </p>
+            </CardContent>
+          </Card>
         ) : (
           <>
             <ProfileSection
               creator={creator}
               email={user?.email}
-              walletBalance={wallet?.balance}
+              walletBalance={supportersTotal}
               supportersTotal={supportersTotal}
             />
             <SupportersSection transactions={transactions} />
