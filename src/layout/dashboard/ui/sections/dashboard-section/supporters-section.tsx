@@ -22,6 +22,13 @@ const formatCurrency = (amount: number) =>
     maximumFractionDigits: 0,
   }).format(amount);
 
+const formatDate = (date: string | null) =>
+  date
+    ? new Intl.DateTimeFormat("fr-FR", {
+        dateStyle: "medium",
+      }).format(new Date(date))
+    : "Date inconnue";
+
 export function SupportersSection({ transactions }: SupportersSectionProps) {
   if (transactions.length > 0) {
     return (
@@ -44,8 +51,14 @@ export function SupportersSection({ transactions }: SupportersSectionProps) {
                     {transaction.donor_name ?? "Supporter anonyme"}
                   </p>
                   <p className="text-sm text-muted-foreground">
-                    {transaction.status ?? "Statut inconnu"}
+                    {formatDate(transaction.paid_at ?? transaction.created_at)}
+                    {transaction.payment_method
+                      ? ` · ${transaction.payment_method}`
+                      : ""}
                   </p>
+                  {transaction.donor_message && (
+                    <p className="mt-1 text-sm">{transaction.donor_message}</p>
+                  )}
                 </div>
                 <p className="font-semibold">
                   {formatCurrency(transaction.amount)}

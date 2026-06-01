@@ -6,6 +6,7 @@ import type {
   MonerooPayment,
   MonerooWebhookEvent,
 } from "@/services/moneroo/types";
+import { persistSuccessfulMonerooPayment } from "@/services/wallet/moneroo-transactions";
 
 const monerooWebhookEventSchema = z.object({
   event: z.enum([
@@ -72,6 +73,10 @@ export async function handleMonerooWebhook({
 }): Promise<{
   event: MonerooWebhookEvent;
   verifiedPayment?: MonerooPayment;
+  persistedPayment?: {
+    persisted: boolean;
+    walletBalance: number | null;
+  };
 }> {
   const config = getMonerooConfig();
 
@@ -96,10 +101,15 @@ export async function handleMonerooWebhook({
 
   if (event.event.startsWith("payment.")) {
     const response = await createMonerooClient().verifyPayment(event.data.id);
+    const persistedPayment =
+      event.event === "payment.success" && response.data.status === "success"
+        ? await persistSuccessfulMonerooPayment(response.data)
+        : undefined;
 
     return {
       event,
       verifiedPayment: response.data,
+      persistedPayment,
     };
   }
 

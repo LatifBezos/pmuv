@@ -21,7 +21,7 @@
 | Section hero + CTA | `hero-section.tsx` | ✅ | CTA reliés aux routes existantes |
 | Section « Comment ça marche » | `features-section.tsx` | ✅ | Contenu statique |
 | Carrousel créateurs (accueil) | `creators-section.tsx` | ✅ | Données Supabase via `getCreators()` |
-| Carrousel projets (accueil) | `projects-section.tsx` | ❌ | Placeholders vides (`Array.from`), pas de données |
+| Carrousel projets (accueil) | `projects-section.tsx` | ✅ | Données Supabase via `getProjects()` + état vide |
 | Section moyens de paiement | `best-section.tsx` | ✅ | Logos Orange Money, Wave, MTN, Stripe, etc. (marketing) |
 | Navbar + menu mobile | `home-navbar.tsx` | ✅ | Liens créateurs, projets, auth, recherche |
 | Footer | `footer.tsx` | 🟡 | Liens cassés neutralisés ; newsletter sans backend |
@@ -37,7 +37,7 @@
 |----------------|-------|--------|--------|
 | Liste des créateurs | `/creators` | ✅ | SSR + `getCreators()` + grille `CreatorsAll` |
 | Recherche créateurs | `/search` | ✅ | Champ de saisie + filtrage effectif côté client |
-| Page créateur publique | `/creator/[slug]` | 🟡 | Profil chargé depuis Supabase ; formulaire supporter local, paiement réel encore absent |
+| Page créateur publique | `/creator/[slug]` | 🟡 | Profil chargé depuis Supabase ; formulaire supporter branché sur l'initialisation Moneroo |
 | Liste des projets | `/projects` | 🟡 | Données Supabase OK ; faux liens détail projet retirés en attendant `/projects/[slug]` |
 | Liste des événements | `/events` | 🟡 | Données Supabase OK ; faux liens détail événement retirés en attendant `/events/[slug]` |
 | Page catalogue produits | `/catalogues` | 🔜 | Requête `getCatalogues()` existe ; **aucune page** |
@@ -53,13 +53,13 @@
 |----------------|---------|--------|--------|
 | Affichage bio + image | `creators-section.tsx` | ✅ | Données `creators` (Supabase) |
 | Thème couleur personnalisé | `creators-section.tsx` | ✅ | `creator.color` appliqué au layout |
-| Choix nombre de verres (1/3/5/10) | `creators-section.tsx` | 🟡 | État UI fonctionnel ; pas encore relié au paiement réel |
-| Saisie nom / message supporter | `creators-section.tsx` | 🟡 | Champs contrôlés côté UI ; pas encore persistés |
-| Bouton « Paye un verre » | `creators-section.tsx` | ❌ | Aucune action (pas d'appel API ni paiement) |
+| Choix nombre de verres (1/3/5/10) | `creators-section.tsx` | ✅ | État UI relié à l'initialisation paiement Moneroo |
+| Saisie email / nom / message supporter | `creators-section.tsx` | ✅ | Champs contrôlés côté UI ; transmis à Moneroo puis persistés après webhook `payment.success` |
+| Bouton « Paye un verre » | `creators-section.tsx` | ✅ | Appel `/api/payments/moneroo/initialize`, redirection checkout, confirmation webhook et écriture wallet |
 | Composant PaymentBox (démo) | `/box`, `payment-box.tsx` | 🟡 | Stub `alert()` retiré ; reste une démo sans passerelle de paiement |
-| Mur des messages supporters | `creators-section.tsx` | 🟡 | Mocks retirés ; état vide tant que les transactions/messages ne sont pas branchés |
+| Mur des messages supporters | `creators-section.tsx` | ✅ | Lit les messages depuis `wallet_transactions` pour le créateur |
 | DrinkCard animé (prototype) | `CreatorList.tsx` | ❌ | Composant isolé, données mock, non utilisé en prod |
-| Affichage transactions réelles | — | 🔜 | Table `wallet_transactions` non consommée côté front |
+| Affichage transactions réelles | `/dashboard`, `/dashboard/payouts`, `creators-section.tsx` | ✅ | Transactions validées consommées côté dashboard, payouts et page créateur |
 
 ---
 
@@ -88,16 +88,16 @@
 |----------------|-------|--------|--------|
 | Layout dashboard + sidebar | `/dashboard/*` | ✅ | Sidebar, header, menu flottant profil |
 | Overview / accueil dashboard | `/dashboard` | ✅ | UI complète ; session, créateur par slug et transactions chargés avec fallback propre si profil absent |
-| Bannière configuration payout | `dashboard/page.tsx` | 🟡 | Affichée pour les créateurs ; action désactivée tant que le module payout reste hors scope |
+| Bannière configuration payout | `dashboard/page.tsx` | ✅ | Affichée pour les créateurs avec lien vers `/dashboard/payouts` |
 | Section profil créateur | `profile-section.tsx` | ✅ | Données créateur/session dynamiques ; édition du profil et upload avatar via `/dashboard/settings` |
-| Section revenus (Earnings) | `profile-section.tsx` | 🟡 | Total calculé depuis `wallet_transactions.creator_id` ; wallet direct non lié au créateur dans le schéma actuel |
-| Section supporters | `supporters-section.tsx` | 🟡 | Lit `wallet_transactions` quand un créateur existe ; dépend encore du paiement réel |
+| Section revenus (Earnings) | `profile-section.tsx` | ✅ | Solde lu depuis `wallet.creator_id`, avec fallback sur les transactions validées |
+| Section supporters | `supporters-section.tsx` | ✅ | Lit les transactions réelles `wallet_transactions` du créateur |
 | Partage de page | `profile-section.tsx` | ✅ | Lien dynamique basé sur le slug créateur |
 | Navigation Overview | `nav-main.tsx` | ✅ | Lien `/dashboard` |
 | Navigation View page | `nav-main.tsx` | ✅ | Lien dynamique vers `/creator/[slug]` quand le profil existe ; entrée désactivée si aucun profil n'est lié |
 | Explore creators | `/dashboard/explore-creators` | ✅ | Liste réelle des créateurs |
 | Nav Monetize (sidebar) | `nav-monetize.tsx` | ❌ | Commenté dans `dashboard-sidebar.tsx` |
-| Payouts (sidebar) | `nav-settings.tsx` | ❌ | Entrée désactivée ; configuration payout non implémentée |
+| Payouts (sidebar) | `nav-settings.tsx`, `/dashboard/payouts` | 🟡 | Entrée active ; page de lecture solde/transactions réelle, demande de versement encore désactivée |
 | Settings (sidebar) | `nav-settings.tsx` | ✅ | Lien vers `/dashboard/settings` pour personnaliser slug, bio, avatar, couleur et lien principal |
 | Profile (menu flottant) | `/dashboard/profile` | 🔜 | Page absente |
 | Settings (menu flottant) | `/dashboard/settings` | ✅ | Lien vers les paramètres créateur |
@@ -179,13 +179,13 @@ using (
 | Schéma `projects` | 🟡 | Lecture seule (`getProjects`) |
 | Schéma `events` | 🟡 | Lecture seule (`getEvents`) |
 | Schéma `catalogues` | 🟡 | Lecture seule (`getCatalogues`) ; pas de page |
-| Schéma `wallet` | 🟡 | Présent mais non requêté côté dashboard tant qu'aucune relation stable avec Auth/créateur n'est disponible |
-| Schéma `wallet_transactions` | 🟡 | Lu côté dashboard ; pas encore écrit par paiement réel |
+| Schéma `wallet` | ✅ | Relié à `creators` via `creator_id` et mis à jour après paiement validé |
+| Schéma `wallet_transactions` | ✅ | Lu côté dashboard/page créateur et écrit idempotemment par le webhook Moneroo |
 | Schéma `payment_methods` | 🔜 | En base ; non utilisé |
 | Champ `kyc_status` (créateurs) | 🔜 | Colonne en base ; pas de flow KYC |
 | Client Supabase browser | `utils/supabase/client.ts` | ✅ | |
-| Client Supabase server | `utils/supabase/server.ts` | 🟡 | Présent ; peu utilisé |
-| Types générés | `database.types.ts` | 🟡 | Ajustés côté app pour retirer `creators.user_id`, à régénérer depuis Supabase quand le schéma source est stabilisé |
+| Client Supabase server | `utils/supabase/server.ts` | ✅ | Client anon serveur + client service-role serveur pour les webhooks |
+| Types générés | `database.types.ts` | 🟡 | Ajustés côté app avec les colonnes wallet Moneroo ; à régénérer depuis Supabase quand le schéma source est stabilisé |
 
 ---
 
@@ -199,10 +199,10 @@ using (
 | Intégration Wave | 🟡 | Préparable via Moneroo (`wave_ci`, `wave_sn`) ; non branché UI |
 | Intégration MTN / Moov | 🟡 | Préparable via Moneroo (`mtn_bj`, `moov_bj`, etc.) ; non branché UI |
 | Intégration Stripe / Visa | 🔜 | Logo marketing seulement |
-| Webhook confirmation paiement | 🟡 | Route `POST /api/payments/moneroo/webhook` ajoutée avec signature HMAC + re-vérification API ; persistance wallet à finaliser |
-| Enregistrement transaction | 🔜 | `wallet_transactions` jamais alimentée |
-| Mise à jour solde wallet | 🔜 | `wallet` jamais mis à jour |
-| Configuration payout créateur | 🔜 | Bannière UI ; pas de page ni API |
+| Webhook confirmation paiement | ✅ | Route `POST /api/payments/moneroo/webhook` avec signature HMAC, re-vérification API et persistance wallet |
+| Enregistrement transaction | ✅ | `wallet_transactions` alimentée avec clé unique `moneroo_payment_id` |
+| Mise à jour solde wallet | ✅ | `wallet.balance` recalculé depuis les transactions `success` du créateur |
+| Configuration payout créateur | 🟡 | Page `/dashboard/payouts` réelle pour solde/transactions ; demande de versement/KYC encore hors scope |
 | Reçu / email confirmation | 🔜 | Absent |
 
 Documentation d'intégration : `docs/payments.md`.
@@ -214,8 +214,8 @@ Documentation d'intégration : `docs/payments.md`.
 | Fonctionnalité | Statut | Détail |
 |----------------|--------|--------|
 | Build Next.js 16 | ✅ | App Router, React 19 |
-| Lint | ✅ | Script `pnpm lint` |
-| Variables env Supabase | 🟡 | Requises ; pas de `.env.example` dans le repo |
+| Lint | 🟡 | Script `pnpm lint` encore basé sur `next lint`, non compatible Next 16 sans config ESLint dédiée |
+| Variables env Supabase | ✅ | `.env.example` ajouté avec Supabase, service role serveur et Moneroo |
 | Middleware auth | 🟡 | Garde dashboard dans le layout ; middleware global absent |
 | Tests (unit/e2e) | 🔜 | Aucun |
 | i18n | 🔜 | `lang="en"` dans layout ; contenu majoritairement FR |
@@ -239,12 +239,10 @@ Documentation d'intégration : `docs/payments.md`.
 
 | Priorité | Fonctionnalité manquante |
 |----------|-------------------------|
-| P0 | Paiement réel + persistance `wallet_transactions` |
-| P0 | Paiement réel + persistance `wallet_transactions` |
-| P0 | Page créateur : bouton payer fonctionnel |
+| P0 | Appliquer la migration wallet Moneroo sur Supabase distant |
+| P0 | Configurer l'URL webhook Moneroo publique |
 | P1 | Édition/enrichissement profil créateur (bio, couleur, avatar) |
-| P1 | Pages `/dashboard/settings` (payout + compte) |
-| P1 | Mur de messages supporters persisté |
+| P1 | Workflow de demande de payout + KYC |
 | P2 | Pages détail projet / événement |
 | P2 | KYC créateur |
 | P2 | Catalogues / boutique |
@@ -254,9 +252,9 @@ Documentation d'intégration : `docs/payments.md`.
 ```
 Marketing & découverte     ████████░░  ~80 %
 Auth & onboarding          ████████░░  ~80 %
-Page créateur (paiement)   ███░░░░░░░  ~30 %
-Dashboard créateur         ██████░░░░  ~60 %
-Paiements & wallet         ░░░░░░░░░░   ~0 %
+Page créateur (paiement)   ████████░░  ~80 %
+Dashboard créateur         ███████░░░  ~70 %
+Paiements & wallet         ███████░░░  ~70 %
 ```
 
 ---

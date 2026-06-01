@@ -195,9 +195,10 @@ export default function DashboardSettingsPage() {
 
     setIsSaving(true);
     const supabase = createClient();
+    const metadataSlug = getCreatorSlugFromUser(user);
     const { data: existingCreator, error: slugError } = await supabase
       .from("creators")
-      .select("id")
+      .select("id, slug, bio, image_url, color, social_links")
       .eq("slug", nextSlug)
       .maybeSingle();
 
@@ -207,7 +208,11 @@ export default function DashboardSettingsPage() {
       return;
     }
 
-    if (existingCreator && existingCreator.id !== creator?.id) {
+    const existingProfile = (existingCreator as CreatorProfile | null) ?? null;
+    const targetCreator =
+      creator ?? (metadataSlug === nextSlug ? existingProfile : null);
+
+    if (existingProfile && existingProfile.id !== targetCreator?.id) {
       setError("Ce slug est déjà utilisé par un autre créateur.");
       setIsSaving(false);
       return;
@@ -242,11 +247,11 @@ export default function DashboardSettingsPage() {
       social_links: website.trim() ? { website: website.trim() } : null,
     };
 
-    let result = creator
+    const result = targetCreator
       ? await supabase
           .from("creators")
           .update(payload)
-          .eq("id", creator.id)
+          .eq("id", targetCreator.id)
           .select("id, slug, bio, image_url, color, social_links")
           .maybeSingle()
       : await supabase
@@ -261,23 +266,11 @@ export default function DashboardSettingsPage() {
       return;
     }
 
-    if (!result.data && creator) {
-      result = await supabase
-        .from("creators")
-        .insert(payload)
-        .select("id, slug, bio, image_url, color, social_links")
-        .maybeSingle();
-    }
-
-    if (result.error) {
-      setError(result.error.message);
-      setIsSaving(false);
-      return;
-    }
-
     if (!result.data) {
       setError(
-        "Le profil créateur a été envoyé, mais aucune ligne n'a été retournée. Vérifiez les policies RLS de lecture/écriture sur la table creators.",
+        targetCreator
+          ? "Le profil créateur existe déjà, mais aucune ligne n'a été mise à jour. Vérifiez les policies RLS de lecture/écriture sur la table creators."
+          : "Le profil créateur a été envoyé, mais aucune ligne n'a été retournée. Vérifiez les policies RLS de lecture/écriture sur la table creators.",
       );
       setIsSaving(false);
       return;
@@ -509,13 +502,13 @@ export default function DashboardSettingsPage() {
           <CardHeader>
             <CardTitle>Payouts</CardTitle>
             <CardDescription>
-              La configuration des versements n'est pas encore disponible dans
-              cette version.
+              Consultez le solde et les transactions validées avant l'activation
+              des demandes de versement.
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Button variant="outline" disabled>
-              Bientôt disponible
+            <Button asChild variant="outline">
+              <Link href="/dashboard/payouts">Ouvrir payouts</Link>
             </Button>
           </CardContent>
         </Card>

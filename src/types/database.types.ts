@@ -253,53 +253,91 @@ export type Database = {
         Row: {
           balance: number | null
           created_at: string
+          creator_id: string | null
           id: string
           updated_at: string | null
         }
         Insert: {
           balance?: number | null
           created_at?: string
+          creator_id?: string | null
           id?: string
           updated_at?: string | null
         }
         Update: {
           balance?: number | null
           created_at?: string
+          creator_id?: string | null
           id?: string
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "wallet_creator_id_fkey"
+            columns: ["creator_id"]
+            isOneToOne: false
+            referencedRelation: "creators"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       wallet_transactions: {
         Row: {
           amount: number
           created_at: string | null
           creator_id: string | null
+          currency: string
           donor_email: string | null
+          donor_message: string | null
           donor_name: string | null
+          glasses: number | null
           id: string
+          moneroo_payment_id: string | null
           payment_method_id: string | null
+          payment_method: string | null
+          payment_provider: string
+          paid_at: string | null
+          raw_payload: Json | null
           status: string | null
+          updated_at: string | null
         }
         Insert: {
           amount: number
           created_at?: string | null
           creator_id?: string | null
+          currency?: string
           donor_email?: string | null
+          donor_message?: string | null
           donor_name?: string | null
+          glasses?: number | null
           id?: string
+          moneroo_payment_id?: string | null
           payment_method_id?: string | null
+          payment_method?: string | null
+          payment_provider?: string
+          paid_at?: string | null
+          raw_payload?: Json | null
           status?: string | null
+          updated_at?: string | null
         }
         Update: {
           amount?: number
           created_at?: string | null
           creator_id?: string | null
+          currency?: string
           donor_email?: string | null
+          donor_message?: string | null
           donor_name?: string | null
+          glasses?: number | null
           id?: string
+          moneroo_payment_id?: string | null
           payment_method_id?: string | null
+          payment_method?: string | null
+          payment_provider?: string
+          paid_at?: string | null
+          raw_payload?: Json | null
           status?: string | null
+          updated_at?: string | null
         }
         Relationships: [
           {

@@ -15,7 +15,7 @@ import {
 export function NavSettings() {
   const pathname = usePathname();
   const settingsItems = [
-    { title: "Payouts", icon: DollarSign, path: "" },
+    { title: "Payouts", icon: DollarSign, path: "/dashboard/payouts" },
     { title: "Settings", icon: Settings, path: "/dashboard/settings" },
   ];
 

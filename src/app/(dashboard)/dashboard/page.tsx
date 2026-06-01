@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -17,10 +19,15 @@ import type { User } from "@supabase/supabase-js";
 import React, { useEffect, useMemo, useState } from "react";
 import { getCreatorSlugFromUser } from "@/hooks/auth0";
 
+type CreatorWallet = {
+  balance: number | null;
+};
+
 export default function DashboardPage() {
   const [user, setUser] = useState<User | null>(null);
   const [creator, setCreator] = useState<Creators | null>(null);
   const [transactions, setTransactions] = useState<WalletTransactions[]>([]);
+  const [wallet, setWallet] = useState<CreatorWallet | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -61,25 +68,44 @@ export default function DashboardPage() {
 
       const creatorRecord = (creatorData as Creators | null) ?? null;
       let transactionData: WalletTransactions[] = [];
+      let walletData: CreatorWallet | null = null;
 
       if (creatorRecord) {
-        const { data, error } = await supabase
-          .from("wallet_transactions")
-          .select("*")
-          .eq("creator_id", creatorRecord.id)
-          .order("created_at", { ascending: false });
+        const [transactionsResult, walletResult] = await Promise.all([
+          supabase
+            .from("wallet_transactions")
+            .select("*")
+            .eq("creator_id", creatorRecord.id)
+            .eq("status", "success")
+            .order("created_at", { ascending: false }),
+          supabase
+            .from("wallet")
+            .select("balance")
+            .eq("creator_id", creatorRecord.id)
+            .maybeSingle(),
+        ]);
 
-        if (error) {
-          console.error("Error fetching dashboard transactions:", error);
+        if (transactionsResult.error) {
+          console.error(
+            "Error fetching dashboard transactions:",
+            transactionsResult.error,
+          );
         }
 
-        transactionData = (data as WalletTransactions[] | null) ?? [];
+        if (walletResult.error) {
+          console.error("Error fetching dashboard wallet:", walletResult.error);
+        }
+
+        transactionData =
+          (transactionsResult.data as WalletTransactions[] | null) ?? [];
+        walletData = (walletResult.data as CreatorWallet | null) ?? null;
       }
 
       if (!isMounted) return;
 
       setCreator(creatorRecord);
       setTransactions(transactionData);
+      setWallet(walletData);
       setIsLoading(false);
     }
 
@@ -98,6 +124,7 @@ export default function DashboardPage() {
       ),
     [transactions]
   );
+  const walletBalance = wallet?.balance ?? supportersTotal;
 
   return (
     <React.Fragment>
@@ -105,10 +132,11 @@ export default function DashboardPage() {
         <div className="border-b bg-amber-50/80 px-4 py-3">
           <div className="mx-auto flex w-full max-w-4xl flex-col items-center justify-between gap-3 sm:flex-row">
             <p className="text-center text-sm font-medium text-amber-950 sm:text-left">
-              La configuration payout n'est pas encore disponible dans cette version.
+              Consultez vos revenus et les prérequis de versement dans le volet
+              payouts.
             </p>
-            <Button variant="outline" className="rounded-full" disabled>
-              Bientôt disponible
+            <Button asChild variant="outline" className="rounded-full">
+              <Link href="/dashboard/payouts">Ouvrir payouts</Link>
             </Button>
           </div>
         </div>
@@ -134,7 +162,7 @@ export default function DashboardPage() {
             <ProfileSection
               creator={creator}
               email={user?.email}
-              walletBalance={supportersTotal}
+              walletBalance={walletBalance}
               supportersTotal={supportersTotal}
             />
             <SupportersSection transactions={transactions} />

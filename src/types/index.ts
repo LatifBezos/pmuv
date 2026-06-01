@@ -63,18 +63,27 @@ export interface Events {
 
 export interface WalletTransactions {
     id : string,
-    creator_id: string,
-    donor_name : string,
-    donor_email : string,
+    creator_id: string | null,
+    donor_name : string | null,
+    donor_email : string | null,
+    donor_message : string | null,
     amount : number,
-    payment_method_id : string,
-    status : string,
-    created_at : string,
+    currency : string,
+    glasses : number | null,
+    moneroo_payment_id : string | null,
+    payment_method : string | null,
+    payment_method_id : string | null,
+    payment_provider : string,
+    paid_at : string | null,
+    status : string | null,
+    created_at : string | null,
+    updated_at : string | null,
 }
 
 export interface Wallet {
     id : string,
-    balance : number,
-    updated_at : string,
+    creator_id : string | null,
+    balance : number | null,
+    updated_at : string | null,
     created_at : string,
 }

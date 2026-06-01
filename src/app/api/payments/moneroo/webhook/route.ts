@@ -22,6 +22,8 @@ export async function POST(request: NextRequest) {
       received: true,
       event: result.event.event,
       paymentStatus: result.verifiedPayment?.status,
+      persisted: result.persistedPayment?.persisted ?? false,
+      walletBalance: result.persistedPayment?.walletBalance ?? null,
     });
   } catch (error) {
     if (error instanceof MonerooWebhookSignatureError) {

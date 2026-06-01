@@ -1,34 +1,93 @@
 "use client";
 
-import { Creators } from "@/types";
-import { useMemo, useState } from "react";
+import { Creators, WalletTransactions } from "@/types";
+import createClient from "@/utils/supabase/client";
+import { useEffect, useState } from "react";
 
 export default function CreatorSection({ creator }: { creator: Creators }) {
   const [selectedGlasses, setSelectedGlasses] = useState(1);
   const [supporterName, setSupporterName] = useState("");
+  const [supporterEmail, setSupporterEmail] = useState("");
   const [message, setMessage] = useState("");
-  const [localMessages, setLocalMessages] = useState<
-    { name: string; text: string; glasses: number }[]
-  >([]);
+  const [transactions, setTransactions] = useState<WalletTransactions[]>([]);
+  const [paymentError, setPaymentError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const pricePerGlass = 1200;
-  const total = useMemo(
-    () => selectedGlasses * pricePerGlass,
-    [selectedGlasses]
-  );
+  const total = selectedGlasses * pricePerGlass;
 
-  const handleSupport = () => {
-    if (!message.trim() && !supporterName.trim()) return;
+  useEffect(() => {
+    let isMounted = true;
 
-    setLocalMessages((messages) => [
-      {
-        name: supporterName.trim() || "Supporter anonyme",
-        text: message.trim() || `${selectedGlasses} verre(s) offert(s)`,
-        glasses: selectedGlasses,
-      },
-      ...messages,
-    ]);
-    setSupporterName("");
-    setMessage("");
+    async function loadSupporterMessages() {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from("wallet_transactions")
+        .select("*")
+        .eq("creator_id", creator.id)
+        .eq("status", "success")
+        .not("donor_message", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(10);
+
+      if (!isMounted) return;
+
+      if (error) {
+        console.error("Error fetching supporter messages:", error);
+        return;
+      }
+
+      setTransactions((data as WalletTransactions[] | null) ?? []);
+    }
+
+    loadSupporterMessages();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [creator.id]);
+
+  const handleSupport = async () => {
+    setPaymentError("");
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch("/api/payments/moneroo/initialize", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          creatorSlug: creator.slug,
+          glasses: selectedGlasses,
+          supporterEmail,
+          supporterName: supporterName || undefined,
+          supporterMessage: message || undefined,
+        }),
+      });
+      const result = (await response.json()) as {
+        checkoutUrl?: string;
+        error?: string;
+      };
+
+      if (response.status >= 500) {
+        throw new Error("Le paiement est temporairement indisponible.");
+      }
+
+      if (!response.ok || !result.checkoutUrl) {
+        throw new Error(
+          result.error || "Impossible de préparer le paiement."
+        );
+      }
+
+      window.location.assign(result.checkoutUrl);
+    } catch (error) {
+      setPaymentError(
+        error instanceof Error
+          ? error.message
+          : "Impossible de préparer le paiement."
+      );
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -78,50 +137,72 @@ export default function CreatorSection({ creator }: { creator: Creators }) {
             Total estimé : {total.toLocaleString("fr-FR")} FCFA
           </p>
 
-          {/* Champs utilisateur */}
-          <input
-            type="text"
-            placeholder="Nom ou @votresocial"
-            value={supporterName}
-            onChange={(event) => setSupporterName(event.target.value)}
-            className="w-full border border-black px-3 py-2 mb-2 focus:outline-none"
-          />
-          <textarea
-            placeholder="Dites quelque chose de gentil..."
-            value={message}
-            onChange={(event) => setMessage(event.target.value)}
-            className="w-full border border-black px-3 py-2 focus:outline-none"
-          />
-
-          <button
-            className="bg-black font-bold py-3 px-6 text-lg hover:text-white transition mt-4"
-            style={{ color: `${creator.color}` }}
-            onClick={handleSupport}
+          <form
+            className="flex flex-col gap-2"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void handleSupport();
+            }}
           >
-            Préparer {selectedGlasses} verre{selectedGlasses > 1 ? "s" : ""}
-          </button>
-          <p className="mt-2 text-sm">
-            Le paiement réel sera branché lors de l'intégration paiement.
-          </p>
+            <input
+              type="email"
+              placeholder="Email pour le reçu"
+              value={supporterEmail}
+              onChange={(event) => setSupporterEmail(event.target.value)}
+              className="w-full border border-black px-3 py-2 focus:outline-none"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Nom ou @votresocial"
+              value={supporterName}
+              onChange={(event) => setSupporterName(event.target.value)}
+              className="w-full border border-black px-3 py-2 focus:outline-none"
+            />
+            <textarea
+              placeholder="Dites quelque chose de gentil..."
+              value={message}
+              onChange={(event) => setMessage(event.target.value)}
+              className="w-full border border-black px-3 py-2 focus:outline-none"
+            />
+
+            <button
+              type="submit"
+              className="bg-black font-bold py-3 px-6 text-lg hover:text-white transition mt-2 disabled:cursor-not-allowed disabled:opacity-70"
+              style={{ color: `${creator.color}` }}
+              disabled={isSubmitting}
+            >
+              {isSubmitting
+                ? "Préparation du paiement..."
+                : `Paye ${selectedGlasses} verre${
+                    selectedGlasses > 1 ? "s" : ""
+                  }`}
+            </button>
+          </form>
+          {paymentError && (
+            <p className="mt-2 text-sm font-semibold text-red-900">
+              {paymentError}
+            </p>
+          )}
         </div>
 
         <div className="mt-8 border-t border-black pt-4">
           <h2 className="text-xl font-bold mb-2">Messages des supporters</h2>
           <div className="space-y-3 max-h-60 overflow-y-auto scrollbar-hide">
-            {localMessages.length === 0 && (
+            {transactions.length > 0 ? (
+              transactions.map((transaction) => (
+                <div key={transaction.id} className="border border-black p-3">
+                  <p className="text-sm">{transaction.donor_message}</p>
+                  <p className="mt-2 text-xs font-semibold uppercase">
+                    {transaction.donor_name ?? "Supporter anonyme"}
+                  </p>
+                </div>
+              ))
+            ) : (
               <p className="text-sm">
                 Aucun message supporter n'est encore disponible.
               </p>
             )}
-            {localMessages.map((msg, idx) => (
-              <div key={idx} className="border border-black p-3 bg-white/40">
-                <p className="font-bold">
-                  {msg.name} a préparé {msg.glasses} verre
-                  {msg.glasses > 1 ? "s" : ""}
-                </p>
-                <p>{msg.text}</p>
-              </div>
-            ))}
           </div>
         </div>
       </div>
