@@ -42,9 +42,7 @@ export default function CreatorSection({ creator }: { creator: Creators }) {
           <h1 className="text-3xl md:text-4xl font-extrabold leading-tight">
             PAYE UN VERRE À <br /> {creator.slug}
           </h1>
-          <p className="italic text-sm md:text-base">
-            Avec PayeMoiUnVerre 🍹
-          </p>
+          <p className="italic text-sm md:text-base">Avec Offremoiunverre 🍹</p>
 
           <div className="flex gap-2 my-4 flex-wrap">
             {["1", "3", "5", "10"].map((n) => (

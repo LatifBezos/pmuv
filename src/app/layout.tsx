@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import {
+  EB_Garamond,
   Geist,
   Geist_Mono,
-  Ubuntu,
   Merriweather,
   Playfair_Display,
+  Ubuntu,
 } from "next/font/google";
-import "./globals.css";
 import NextTopLoader from "nextjs-toploader";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,10 +38,16 @@ const playfairDisplay = Playfair_Display({
   weight: ["400", "700"],
 });
 
+const ebGaramond = EB_Garamond({
+  variable: "--font-eb-garamond",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 export const metadata: Metadata = {
-  title: "Payemoiunverre",
+  title: "Offremoiunverre",
   description:
-    "Payemoiunverre, une façon simple et conviviale de recevoir le soutien de votre communauté",
+    "Offremoiunverre, une façon simple et conviviale de recevoir le soutien de votre communauté",
 };
 
 export default function RootLayout({
@@ -51,7 +58,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${ubuntu.variable} ${merriweather.variable} ${playfairDisplay.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${ubuntu.variable} ${merriweather.variable} ${playfairDisplay.variable} ${ebGaramond.variable} antialiased`}
       >
         <NextTopLoader
           color="#EEEEEE"

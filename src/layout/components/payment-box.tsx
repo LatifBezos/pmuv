@@ -9,20 +9,21 @@ const predefinedOffers = [1, 2, 3];
 const pricePerGlass = 1200; // Prix d'un verre en FCFA
 
 interface Color {
-  color: string;
+  color?: string;
 }
 
-const PaymentBox = ({color} : Color) => {
+const PaymentBox = ({ color = "#40916c" }: Color) => {
   const [quantity, setQuantity] = useState(predefinedOffers[0]);
   const [customQuantity, setCustomQuantity] = useState<number | null>(null);
   const [message, setMessage] = useState("");
+  const [feedback, setFeedback] = useState("");
 
   const handlePayment = () => {
     const finalQuantity = customQuantity || quantity;
-    alert(
-      `Paiement de ${finalQuantity} verre(s) pour ${
+    setFeedback(
+      `Paiement prêt : ${finalQuantity} verre(s), ${
         finalQuantity * pricePerGlass
-      } FCFA\nMessage: ${message}`
+      } FCFA. L'intégration paiement reste à brancher.`
     );
   };
 
@@ -96,6 +97,9 @@ const PaymentBox = ({color} : Color) => {
       >
         <BeerIcon size={24} /> Payer maintenant
       </Button>
+      {feedback && (
+        <p className="mt-4 text-sm font-medium text-white">{feedback}</p>
+      )}
     </div>
   );
 };

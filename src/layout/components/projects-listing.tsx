@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { Projects } from "@/types";
 import { BeerIcon } from "lucide-react";
 
@@ -7,7 +5,7 @@ interface ProjectsAllProps {
   projects: Projects[];
 }
 
-export function EventsAll({ projects }: ProjectsAllProps) {
+export function ProjectsAll({ projects }: ProjectsAllProps) {
   if (!projects) {
     return null;
   }
@@ -17,26 +15,28 @@ export function EventsAll({ projects }: ProjectsAllProps) {
       <div className="container mx-auto">
         {/* Grid layout */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
-          {projects.map((projects, index) => (
-            <Link
+          {projects.map((project, index) => (
+            <article
               key={index}
-              href={`/creator/${projects.slug}`}
               className="block relative group"
             >
               <div className="relative w-full h-64 rounded-lg overflow-hidden shadow-md">
                 <img
-                  src={projects.image_url}
-                  alt={projects.slug}
+                  src={project.image_url}
+                  alt={project.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 flex flex-col justify-center items-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <div className="absolute inset-0 flex flex-col justify-center items-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 text-center px-4">
                   <BeerIcon className="size-8 text-white rotate-12 mb-2" />
                   <p className="text-2xl text-white font-bold">
-                    {projects.slug}
+                    {project.title}
+                  </p>
+                  <p className="text-sm text-white/80">
+                    Page projet bientôt disponible
                   </p>
                 </div>
               </div>
-            </Link>
+            </article>
           ))}
         </div>
       </div>

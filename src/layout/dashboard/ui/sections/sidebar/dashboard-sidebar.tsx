@@ -25,9 +25,9 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { NavMain } from "@/layout/dashboard/ui/sections/sidebar/nav-main";
 import { NavMonetize } from "@/layout/dashboard/ui/sections/sidebar/nav-monetize";
 import { NavSettings } from "@/layout/dashboard/ui/sections/sidebar/nav-settings";
-import { NavMain } from "@/layout/dashboard/ui/sections/sidebar/nav-main";
 
 // This is sample data.
 const data = {
@@ -175,8 +175,8 @@ export function DashboardSidebar({
                 <BeerIcon className="size-20 rotate-12 transition-all duration-200 text-muted-foreground" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
-                <span className="truncate font-semibold">Payemoiunverre</span>
-                <span className="truncate text-xs">Payemoiunverre</span>
+                <span className="truncate font-semibold">Offremoiunverre</span>
+                <span className="truncate text-xs">Offremoiunverre</span>
               </div>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -184,11 +184,11 @@ export function DashboardSidebar({
       </SidebarHeader>
       <SidebarContent className="flex flex-col gap-4 bg-white py-4">
         <NavMain />
-        <NavMonetize />
+        {/* <NavMonetize /> */}
         <NavSettings />
       </SidebarContent>
       <SidebarFooter>
-        <p className="px-4 text-sm text-muted-foreground">Payemoiunverre</p>
+        <p className="px-4 text-sm text-muted-foreground">Offremoiunverre</p>
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>

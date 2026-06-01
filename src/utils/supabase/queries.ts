@@ -15,9 +15,6 @@ export const getCreators = cache(async () => {
     return data;
 });
 
-console.log('Supabase creator:', supabase);
-
-
 export const slugCreator = cache(async (slug: string) => {
     const { data, error } = await supabase
         .from('creators')
@@ -45,7 +42,6 @@ export const slugSearch = cache(async (slug: string) => {
   }
 
   if (data && data.length > 0) {
-    console.log("slug trouvé", data);
     return true; // le slug existe déjà
   } else {
     return false; // le slug n'existe pas
@@ -86,6 +82,36 @@ export const getCatalogues = cache(async () => {
         console.error('Error fetching catalogues with this slug:', error);
         return [];
     }
+    return data;
+});
+
+export const getCreatorBySlug = cache(async (slug: string) => {
+    const { data, error } = await supabase
+        .from('creators')
+        .select('*')
+        .eq('slug', slug)
+        .maybeSingle();
+
+    if (error) {
+        console.error('Error fetching creator with this slug:', error);
+        return null;
+    }
+
+    return data;
+});
+
+export const getWalletTransactionsByCreatorId = cache(async (creatorId: string) => {
+    const { data, error } = await supabase
+        .from('wallet_transactions')
+        .select('*')
+        .eq('creator_id', creatorId)
+        .order('created_at', { ascending: false });
+
+    if (error) {
+        console.error('Error fetching wallet transactions with this creator id:', error);
+        return [];
+    }
+
     return data;
 });
 

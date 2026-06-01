@@ -8,14 +8,12 @@ import { useEffect, useState } from "react";
 const CreatorPage = () => {
   const params = useParams();
   const slug = params?.slug;
-  console.log("slug", slug);
   const [creator, setCreator] = useState<Creators | null>(null);
 
   useEffect(() => {
     if (!slug) return;
     async function fetchCreators() {
       const data = await slugCreator(slug as string);
-      console.log("data", data);
       setCreator(data[0]);
     }
     fetchCreators();

@@ -3,14 +3,20 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 
+type Supporter = {
+  name: string;
+  amount: number;
+  message: string;
+};
+
 export default function DrinkCard() {
   const [fillLevel, setFillLevel] = useState(30);
-  const [supporters, setSupporters] = useState([
+  const [supporters, setSupporters] = useState<Supporter[]>([
     { name: 'Cathy', amount: 3, message: 'À votre santé !' },
     { name: 'Tony', amount: 5, message: 'Tchin-tchin !' }
   ]);
 
-  const handleDonation = (amount) => {
+  const handleDonation = (amount: number) => {
     setFillLevel(Math.min(100, fillLevel + (amount * 5)));
     setSupporters([
       ...supporters,

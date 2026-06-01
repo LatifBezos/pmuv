@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Separator } from "@/components/ui/separator";
 import createClient from "@/utils/supabase/client";
@@ -11,30 +11,45 @@ import {
 import { ProfileFloatButton } from "@/layout/dashboard/ui/profile-float-button";
 import { DashboardSidebar } from "@/layout/dashboard/ui/sections/sidebar/dashboard-sidebar";
 import { useEffect, useState } from "react";
+import type { User } from "@supabase/supabase-js";
+import { usePathname, useRouter } from "next/navigation";
 
 export default function DashboardMainLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const [user, setUser] = useState<User | null>(null);
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
+  const router = useRouter();
+  const pathname = usePathname();
 
-  const [user, setUser] = useState<any>(null);
+  useEffect(() => {
+    const fetchSession = async () => {
+      const supabase = createClient();
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (session) {
+        setUser(session.user);
+        setIsCheckingSession(false);
+        return;
+      }
 
+      router.replace(`/login?next=${encodeURIComponent(pathname)}`);
+    };
+    fetchSession();
+  }, [pathname, router]);
 
-useEffect(() => {
-  const fetchSession = async () => {
-    const supabase = createClient();
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session) {
-      console.log("sess",session)
-      const user = session.user;
-      console.log(user.id);       
-      console.log(user.email); 
-      console.log(user.user_metadata); 
-    }
-  };
-  fetchSession();
-}, []);
+  if (isCheckingSession) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <p className="text-sm font-medium text-muted-foreground">
+          Vérification de la session...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider>
@@ -48,7 +63,7 @@ useEffect(() => {
               className="mx-2 h-4 hidden sm:block"
             />
             <div className="font-medium text-sm sm:text-base">
-              Payemoiunverre
+              {user?.email ?? "Offremoiunverre"}
             </div>
           </div>
         </header>

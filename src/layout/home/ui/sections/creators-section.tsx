@@ -6,7 +6,6 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Link from "next/link";
-import { createClient } from "@supabase/supabase-js";
 import { getCreators } from "@/utils/supabase/queries";
 import { Creators } from "@/types";
 import { useState, useEffect } from "react";
@@ -26,8 +25,6 @@ export function CreatorsSection() {
   if (!creators) {
     return null;
   }
-
-  console.log("creators", creators);
 
   return (
     <div className="w-full px-4 py-2">

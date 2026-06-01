@@ -2,7 +2,7 @@ import { Suspense } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 import { getProjects } from "@/utils/supabase/queries";
-import { EventsAll } from "@/layout/components/events-listing";
+import { ProjectsAll } from "@/layout/components/projects-listing";
 
 const ProjectsPage = async () => {
   const data = await getProjects();
@@ -10,7 +10,7 @@ const ProjectsPage = async () => {
   return (
     <Suspense fallback={<ProjectsLoading />}>
       <div className="container w-full mx-auto">
-        <EventsAll events={data} />
+        <ProjectsAll projects={data} />
       </div>
     </Suspense>
   );

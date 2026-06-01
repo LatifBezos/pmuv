@@ -71,7 +71,6 @@ export type Database = {
           kyc_status: string | null
           slug: string
           social_links: Json | null
-          user_id: string | null
         }
         Insert: {
           bio?: string | null
@@ -82,7 +81,6 @@ export type Database = {
           kyc_status?: string | null
           slug: string
           social_links?: Json | null
-          user_id?: string | null
         }
         Update: {
           bio?: string | null
@@ -93,17 +91,8 @@ export type Database = {
           kyc_status?: string | null
           slug?: string
           social_links?: Json | null
-          user_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "creators_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       events: {
         Row: {
@@ -264,30 +253,30 @@ export type Database = {
         Row: {
           balance: number | null
           created_at: string
+          creator_id: string | null
           id: string
           updated_at: string | null
-          user_id: string | null
         }
         Insert: {
           balance?: number | null
           created_at?: string
+          creator_id?: string | null
           id?: string
           updated_at?: string | null
-          user_id?: string | null
         }
         Update: {
           balance?: number | null
           created_at?: string
+          creator_id?: string | null
           id?: string
           updated_at?: string | null
-          user_id?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "wallet_user_id_fkey"
-            columns: ["user_id"]
+            foreignKeyName: "wallet_creator_id_fkey"
+            columns: ["creator_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "creators"
             referencedColumns: ["id"]
           },
         ]
@@ -297,31 +286,58 @@ export type Database = {
           amount: number
           created_at: string | null
           creator_id: string | null
+          currency: string
           donor_email: string | null
+          donor_message: string | null
           donor_name: string | null
+          glasses: number | null
           id: string
+          moneroo_payment_id: string | null
           payment_method_id: string | null
+          payment_method: string | null
+          payment_provider: string
+          paid_at: string | null
+          raw_payload: Json | null
           status: string | null
+          updated_at: string | null
         }
         Insert: {
           amount: number
           created_at?: string | null
           creator_id?: string | null
+          currency?: string
           donor_email?: string | null
+          donor_message?: string | null
           donor_name?: string | null
+          glasses?: number | null
           id?: string
+          moneroo_payment_id?: string | null
           payment_method_id?: string | null
+          payment_method?: string | null
+          payment_provider?: string
+          paid_at?: string | null
+          raw_payload?: Json | null
           status?: string | null
+          updated_at?: string | null
         }
         Update: {
           amount?: number
           created_at?: string | null
           creator_id?: string | null
+          currency?: string
           donor_email?: string | null
+          donor_message?: string | null
           donor_name?: string | null
+          glasses?: number | null
           id?: string
+          moneroo_payment_id?: string | null
           payment_method_id?: string | null
+          payment_method?: string | null
+          payment_provider?: string
+          paid_at?: string | null
+          raw_payload?: Json | null
           status?: string | null
+          updated_at?: string | null
         }
         Relationships: [
           {

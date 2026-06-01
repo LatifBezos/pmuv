@@ -4,20 +4,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getCreators } from "@/utils/supabase/queries";
 import SearchBox from "@/layout/components/searchbox";
 
-import { CreatorsAll } from "@/layout/components/creators-listing";
-
 
 const SearchPage = async () => {
   const data = await getCreators();
 
   return (
     <Suspense fallback={<CreatorsLoading />}>
-      <div className="w-full flex flex-row items-center bg-[#40916c] py-8">
-        <SearchBox />
-      </div>
-      <div className="container w-full mx-auto">
-        <CreatorsAll creators={data} />
-      </div>
+      <SearchBox creators={data} />
     </Suspense>
   );
 };
