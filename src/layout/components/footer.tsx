@@ -53,8 +53,8 @@ function Footer() {
             <Link href="/#comment-ca-marche" className="text-white">
               Comment ça marche ?
             </Link>
-            <Link href="/projects" className="text-white">
-              Nos projets
+            <Link href="/about" className="text-white">
+              A propos de nous
             </Link>
             <Link href="/creators" className="text-white">
               Créateurs

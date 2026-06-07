@@ -18,7 +18,7 @@ const CreatorPage = async () => {
 
 const CreatorsLoading = () => {
   return (
-    <div className="w-full px-4 py-10">
+    <div className="w-full px-4 py-4">
       <div className="container mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
           {Array.from({ length: 12 }).map((_, index) => (
