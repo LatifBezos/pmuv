@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MoveRight, PhoneCall } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 function HeroSection() {
@@ -42,21 +43,21 @@ function HeroSection() {
           <div className="grid grid-cols-2 gap-8">
             <div className="bg-muted rounded-md aspect-square">
               <img
-                src="https://images.unsplash.com/photo-1627897495484-229b29feb0d5?q=80&w=2670&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="/images/groupy.avif"  
                 alt="Hero 1"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="bg-muted rounded-md row-span-2 ">
               <img
-                src="https://images.unsplash.com/photo-1648522168784-067e98df88c0?q=80&w=2574&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="/images/omuv-1.avif"
                 alt="Hero 2"
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="bg-muted rounded-md aspect-square">
               <img
-                src="https://images.unsplash.com/photo-1511945863317-d60e146e9016?q=80&w=2655&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                src="/images/omuv-2.avif"
                 alt="Hero 2"
                 className="w-full h-full object-cover"
               />

@@ -70,6 +70,24 @@ export default function DashboardPage() {
       let transactionData: WalletTransactions[] = [];
       let walletData: CreatorWallet | null = null;
 
+      /* 
+        
+        */
+
+      if (creatorSlug) {
+        const result = creatorRecord
+          ? await supabase
+              .from("wallet")
+              .select("*")
+              .eq("creator_id", creatorRecord.id)
+              .maybeSingle()
+          : { data: null, error: null };
+
+        const new_transa = result.data;
+        const transacError = result.error;
+
+        console.log("new_transa_result", new_transa);
+
       if (creatorRecord) {
         const [transactionsResult, walletResult] = await Promise.all([
           supabase
@@ -85,6 +103,8 @@ export default function DashboardPage() {
             .maybeSingle(),
         ]);
 
+        console.log("transactionsResult", transactionsResult);
+
         if (transactionsResult.error) {
           console.error(
             "Error fetching dashboard transactions:",
@@ -96,6 +116,8 @@ export default function DashboardPage() {
           console.error("Error fetching dashboard wallet:", walletResult.error);
         }
 
+        
+
         transactionData =
           (transactionsResult.data as WalletTransactions[] | null) ?? [];
         walletData = (walletResult.data as CreatorWallet | null) ?? null;
@@ -106,7 +128,8 @@ export default function DashboardPage() {
       setCreator(creatorRecord);
       setTransactions(transactionData);
       setWallet(walletData);
-      setIsLoading(false);
+        setIsLoading(false);
+      }
     }
 
     loadDashboardData();
@@ -125,6 +148,7 @@ export default function DashboardPage() {
     [transactions]
   );
   const walletBalance = wallet?.balance ?? supportersTotal;
+
 
   return (
     <React.Fragment>

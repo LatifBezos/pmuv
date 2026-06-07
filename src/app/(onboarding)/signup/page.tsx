@@ -111,7 +111,7 @@ export default function SignupPage() {
     <div className="w-full h-screen grid grid-cols-1 md:grid-cols-2">
       <div className="hidden md:flex items-center justify-center bg-white">
         <img
-          src="/jed-villejo-pumko2FFxY0-unsplash.jpg"
+          src="/images/omuv-4.jpg"
           alt="Signup Illustration"
           className="w-full h-screen object-cover"
         />
@@ -170,25 +170,24 @@ export default function SignupPage() {
                 )}
               </div>
             </div>
-            <p id="signup-slug-help" className="text-left text-xs text-muted-foreground">
-              Utilisez un slug court, lisible et sans espace.
-            </p>
-            {!loading && slugValid === true && (
+            <p id="signup-slug-help" className="text-left text-xs text-muted-foreground mb-2">
+              Utilisez un slug court, lisible et sans espace. {!loading && slugValid === true && (
               <p id="signup-slug-status" className="text-left text-xs font-medium text-green-700">
-                Ce slug est disponible.
+                Disponible.
               </p>
             )}
             {!loading && slugValid === false && (
               <p id="signup-slug-status" role="alert" className="text-left text-xs font-medium text-destructive">
-                Ce slug est déjà utilisé.
+                Déjà utilisé.
               </p>
             )}
+            </p>
           </div>
 
           <div className="flex w-full max-w-sm flex-col">
             <Button
               variant="outline"
-              className="h-11 rounded-xl font-semibold"
+              className="h-11 px-4 rounded-xl font-semibold border border-black cursor-pointer transition-colors duration-200 text-black hover:bg-gray-800 hover:text-white"
               disabled={loading || slugValid !== true}
               onClick={() => setShowConnect(true)}
             >

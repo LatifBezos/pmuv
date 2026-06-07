@@ -5,6 +5,7 @@ import { MenuIcon, SearchIcon, XIcon } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { HomeNavbarLogo } from "./home-navbar-logo";
+import { usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 
@@ -53,6 +54,8 @@ const menuItems = [
 ];
 export const HomeNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   return (
     <nav className="flex items-center justify-between w-full bg-black py-3 px-3 sm:py-4 sm:px-4 md:py-6 md:px-6">
@@ -66,9 +69,11 @@ export const HomeNavbar = () => {
       </div>
 
       <div className="flex items-center gap-3 sm:gap-4 md:gap-6 group">
+        {!isHome && 
         <Link href="/search" className="text-white">
           <SearchIcon className="size-5 sm:size-6 text-white cursor-pointer" />
         </Link>
+      }
 
         {/* Desktop Navigation */}
         <div className="hidden lg:flex items-center gap-4">

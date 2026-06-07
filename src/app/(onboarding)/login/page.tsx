@@ -1,15 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { authConnect, authGoogle, authFB } from "@/hooks/auth0";
-import { BeerIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+import Image from "next/image";
 import { useEffect, useState } from "react";
+import { BeerIcon } from "lucide-react";
+
+import { authConnect, authGoogle, authFB } from "@/hooks/auth0";
+import { cn } from "@/lib/utils";
 import createClient from "@/utils/supabase/client";
+
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { AuthField } from "../_components/auth-field";
-
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -22,10 +24,12 @@ export default function LoginPage() {
     const params = new URLSearchParams(window.location.search);
     const next = params.get("next");
     const safeNext = next?.startsWith("/") ? next : "/dashboard";
+
     setNextPath(safeNext);
 
     async function redirectAuthenticatedUser() {
       const supabase = createClient();
+
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -39,21 +43,21 @@ export default function LoginPage() {
   }, []);
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trim();
-    setEmail(value);
+    setEmail(e.target.value.trim());
     setError(null);
   };
 
   const handlePass = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPass(value);
+    setPass(e.target.value);
     setError(null);
   };
 
   const signIn = async () => {
     setIsSubmitting(true);
     setError(null);
+
     const result = await authConnect(email, pass, nextPath);
+
     if (result.error) {
       setError(result.error);
       setIsSubmitting(false);
@@ -62,6 +66,7 @@ export default function LoginPage() {
 
   const handleOAuth = async (provider: "google" | "facebook") => {
     setError(null);
+
     const result =
       provider === "google"
         ? await authGoogle(nextPath)
@@ -72,195 +77,206 @@ export default function LoginPage() {
     }
   };
 
-
   return (
-    <div className="w-full h-screen grid grid-cols-1 md:grid-cols-2">
-      <span className="absolute top-5 left-5 cursor-pointer">
-          <Link href="/" className="text-white">
-              <BeerIcon
-              className={cn(
-                "size-8 sm:size-12 text-black rotate-12 transition-all duration-200"
-              )}
-            />
-          </Link>
-        </span>
+    <div className="min-h-screen w-full grid grid-cols-1 md:grid-cols-2 bg-white">
+      {/* LOGO */}
+      <span className="fixed top-5 left-5 z-50 cursor-pointer">
+        <Link href="/" className="text-black">
+          <BeerIcon
+            className={cn(
+              "size-8 sm:size-10 rotate-12 transition-all duration-200"
+            )}
+          />
+        </Link>
+      </span>
+
       {/* SECTION GAUCHE */}
-      <div className="flex flex-col items-center justify-center bg-white p-8">
-        <h1 className="text-3xl font-bold text-black mb-8">
-          Content de vous revoir
-        </h1>
+      <div className="flex flex-col justify-center overflow-y-auto px-6 py-16 sm:px-10 md:px-14">
+        <div className="mx-auto w-full max-w-md">
+          <h1 className="mb-8 text-center text-2xl font-bold text-black sm:text-3xl md:text-left">
+            Content de vous revoir
+          </h1>
 
-        <div className="flex w-full max-w-sm flex-col gap-4">
-              <AuthField
-                id="login-email"
-                type="email"
-                label="Email"
-                placeholder="vous@exemple.com"
-                value={email}
-                onChange={handleEmail}
-                disabled={isSubmitting}
-                error={Boolean(error)}
-                autoComplete="email"
-                aria-describedby={error ? "login-error" : undefined}
-              />
-              <AuthField
-                id="login-password"
-                type="password"
-                label="Mot de passe"
-                placeholder="Votre mot de passe"
-                value={pass}
-                onChange={handlePass}
-                disabled={isSubmitting}
-                error={Boolean(error)}
-                autoComplete="current-password"
-                aria-describedby={error ? "login-error" : undefined}
-              />
-              {error && (
-                <p id="login-error" role="alert" className="text-left text-sm font-medium text-destructive">
-                  {error}
-                </p>
-              )}
-              <Button
-                className="h-11 rounded-xl font-semibold"
-                disabled={!email || !pass || isSubmitting}
-                onClick={signIn}
+          {/* FORMULAIRE */}
+          <div className="flex w-full flex-col gap-4">
+            <AuthField
+              id="login-email"
+              type="email"
+              label="Email"
+              placeholder="vous@exemple.com"
+              value={email}
+              onChange={handleEmail}
+              disabled={isSubmitting}
+              error={Boolean(error)}
+              autoComplete="email"
+              aria-describedby={error ? "login-error" : undefined}
+            />
+
+            <AuthField
+              id="login-password"
+              type="password"
+              label="Mot de passe"
+              placeholder="Votre mot de passe"
+              value={pass}
+              onChange={handlePass}
+              disabled={isSubmitting}
+              error={Boolean(error)}
+              autoComplete="current-password"
+              aria-describedby={error ? "login-error" : undefined}
+            />
+
+            {error && (
+              <p
+                id="login-error"
+                role="alert"
+                className="text-sm font-medium text-destructive"
               >
-                {isSubmitting ? "Connexion..." : "Se connecter"}
-              </Button>
-              <Link
-                href="/reset-password"
-                className="text-center text-sm font-bold text-black underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                {error}
+              </p>
+            )}
+
+            <Button
+              className="h-11 w-full rounded-xl font-semibold"
+              disabled={!email || !pass || isSubmitting}
+              onClick={signIn}
+            >
+              {isSubmitting ? "Connexion..." : "Se connecter"}
+            </Button>
+
+            <Link
+              href="/reset-password"
+              className="text-center text-sm font-bold text-black underline underline-offset-4"
+            >
+              Mot de passe oublié ?
+            </Link>
+          </div>
+
+          {/* SEPARATEUR */}
+          <div className="my-6 flex items-center justify-center gap-4">
+            <Separator className="flex-1" />
+            <p className="text-sm text-muted-foreground">ou</p>
+            <Separator className="flex-1" />
+          </div>
+
+          {/* GOOGLE */}
+          <div className="flex flex-col gap-4">
+            <button
+              onClick={() => handleOAuth("google")}
+              className="flex h-11 w-full items-center justify-center rounded-xl border-2 border-black bg-white px-4 font-medium text-black transition hover:bg-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 48 48"
+                className="mr-2 h-5 w-5"
               >
-                Mot de passe oublié ?
-              </Link>
-        </div>
+                <path
+                  fill="#FFC107"
+                  d="M43.611 20.083H42V20H24v8h11.303c-1.59 4.657-6.08 8-11.303 8-6.627 
+                  0-12-5.373-12-12s5.373-12 12-12c3.059 
+                  0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 
+                  6.053 29.268 4 24 4 12.954 4 4 12.954 4 
+                  24s8.954 20 20 20c11.045 0 20-8.954 
+                  20-20 0-1.341-.138-2.65-.389-3.917z"
+                />
+                <path
+                  fill="#FF3D00"
+                  d="M6.306 14.691l6.571 4.819C14.655 
+                  16.108 19.002 14 24 14c3.059 0 5.842 
+                  1.154 7.961 3.039l5.657-5.657C34.046 
+                  6.053 29.268 4 24 4c-7.843 0-14.455 
+                  4.522-17.694 10.691z"
+                />
+                <path
+                  fill="#4CAF50"
+                  d="M24 44c5.166 0 9.86-1.977 
+                  13.409-5.192l-6.19-5.238C29.211 
+                  35.091 26.715 36 24 36c-5.202 0-9.599-3.317-11.283-7.946l-6.522 
+                  5.025C10.286 39.556 16.799 44 24 44z"
+                />
+                <path
+                  fill="#1976D2"
+                  d="M43.611 20.083H42V20H24v8h11.303c-1.087 
+                  3.185-3.025 5.877-5.571 
+                  7.656l.003-.002 6.19 
+                  5.238C39.408 36.843 44 30.523 44 
+                  24c0-1.341-.138-2.65-.389-3.917z"
+                />
+              </svg>
 
-        <div className="flex items-center justify-center gap-4 my-5 w-full max-w-sm">
-          <Separator className="flex-1" />
-          <p className="text-sm text-muted-foreground">ou</p>
-          <Separator className="flex-1" />
-        </div>
+              Se connecter avec Google
+            </button>
 
-
-        {/* Boutons sociaux */}
-        <div className="flex flex-col w-full max-w-sm space-y-4">
-          {/* Google */}
-          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg border border-2 border-black hover:bg-gray-200 transition p-12 cursor-pointer"
-            onClick={() => handleOAuth("google")}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 48 48"
-              className="w-6 h-6 mr-2"
+            {/* FACEBOOK */}
+            <button
+              onClick={() => handleOAuth("facebook")}
+              className="flex h-11 w-full items-center justify-center rounded-xl border-2 border-black bg-white px-4 font-medium text-black transition hover:bg-gray-100"
             >
-              <path
-                fill="#FFC107"
-                d="M43.611 20.083H42V20H24v8h11.303c-1.59 4.657-6.08 8-11.303 8-6.627 
-                0-12-5.373-12-12s5.373-12 12-12c3.059 
-                0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 
-                6.053 29.268 4 24 4 12.954 4 4 12.954 4 
-                24s8.954 20 20 20c11.045 0 20-8.954 
-                20-20 0-1.341-.138-2.65-.389-3.917z"
-              />
-              <path
-                fill="#FF3D00"
-                d="M6.306 14.691l6.571 4.819C14.655 
-                16.108 19.002 14 24 14c3.059 0 5.842 
-                1.154 7.961 3.039l5.657-5.657C34.046 
-                6.053 29.268 4 24 4c-7.843 0-14.455 
-                4.522-17.694 10.691z"
-              />
-              <path
-                fill="#4CAF50"
-                d="M24 44c5.166 0 9.86-1.977 
-                13.409-5.192l-6.19-5.238C29.211 
-                35.091 26.715 36 24 36c-5.202 0-9.599-3.317-11.283-7.946l-6.522 
-                5.025C10.286 39.556 16.799 44 24 44z"
-              />
-              <path
-                fill="#1976D2"
-                d="M43.611 20.083H42V20H24v8h11.303c-1.087 
-                3.185-3.025 5.877-5.571 
-                7.656l.003-.002 6.19 
-                5.238C39.408 36.843 44 30.523 44 
-                24c0-1.341-.138-2.65-.389-3.917z"
-              />
-            </svg>
-            Se connecter avec Google
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="mr-2 h-5 w-5"
+              >
+                <path
+                  fill="#1877F2"
+                  d="M22.675 0H1.325C.593 0 0 
+                  .593 0 1.326v21.348C0 23.407.593 
+                  24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 
+                  1.894-4.788 4.659-4.788 1.325 0 2.463.099 
+                  2.795.143v3.24l-1.918.001c-1.504 
+                  0-1.796.715-1.796 
+                  1.763v2.313h3.587l-.467 
+                  3.622h-3.12V24h6.116C23.407 24 24 
+                  23.407 24 22.674V1.326C24 
+                  .593 23.407 0 22.675 0z"
+                />
+              </svg>
 
-          {/* Facebook */}
-          <button className="flex items-center justify-center bg-white px-4 py-2 rounded-lg border border-2 border-black hover:bg-gray-200 transition cursor-pointer"
-            onClick={() => handleOAuth("facebook")}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              className="w-6 h-6 mr-2"
+              Se connecter avec Facebook
+            </button>
+
+            {/* LINKEDIN */}
+            <button
+              disabled
+              className="flex h-11 w-full items-center justify-center rounded-xl border-2 border-black bg-white px-4 font-medium text-black opacity-60"
             >
-              <path
-                fill="#1877F2"
-                d="M22.675 0H1.325C.593 0 0 
-                .593 0 1.326v21.348C0 23.407.593 
-                24 1.325 24H12.82v-9.294H9.692v-3.622h3.128V8.413c0-3.1 
-                1.894-4.788 4.659-4.788 1.325 0 2.463.099 
-                2.795.143v3.24l-1.918.001c-1.504 
-                0-1.796.715-1.796 
-                1.763v2.313h3.587l-.467 
-                3.622h-3.12V24h6.116C23.407 24 24 
-                23.407 24 22.674V1.326C24 
-                .593 23.407 0 22.675 0z"
-              />
-            </svg>
-            Se connecter avec Facebook
-          </button>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                className="mr-2 h-5 w-5"
+              >
+                <path
+                  fill="#0A66C2"
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 
+                  0-2.136 1.445-2.136 2.939v5.667H9.35V9h3.414v1.561h.049c.476-.9 
+                  1.637-1.852 3.368-1.852 
+                  3.598 0 4.263 2.368 
+                  4.263 5.455v6.288z"
+                />
+              </svg>
 
-          {/* LinkedIn */}
-          <button
-            className="flex items-center justify-center bg-white px-4 py-2 rounded-lg border border-2 border-black transition disabled:cursor-not-allowed disabled:opacity-60"
-            disabled
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              className="w-6 h-6 mr-2"
-            >
-              <path
-                fill="#0A66C2"
-                d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 
-                0-2.136 1.445-2.136 2.939v5.667H9.35V9h3.414v1.561h.049c.476-.9 
-                1.637-1.852 3.368-1.852 
-                3.598 0 4.263 2.368 
-                4.263 5.455v6.288zM5.337 7.433a2.062 
-                2.062 0 11.001-4.124 2.062 
-                2.062 0 01-.001 4.124zM6.865 
-                20.452H3.808V9h3.057v11.452zM22.225 
-                0H1.771C.792 0 0 .771 0 
-                1.723v20.549C0 23.229.792 
-                24 1.771 24h20.451C23.2 
-                24 24 23.229 24 
-                22.271V1.723C24 .771 23.2 
-                0 22.225 0z"
-              />
-            </svg>
-            LinkedIn bientôt disponible
-          </button>
-        </div>
+              LinkedIn bientôt disponible
+            </button>
+          </div>
 
-        <div className="flex items-center mt-6 text-black text-center">
-          <p>Pas encore de compte ?</p>
-          <Link href="/signup" className="underline font-bold ml-2">
-            S'inscrire
-          </Link>
+          {/* SIGNUP */}
+          <div className="mt-6 flex items-center justify-center text-center text-black md:justify-start">
+            <p>Pas encore de compte ?</p>
+
+            <Link href="/signup" className="ml-2 font-bold underline">
+              S'inscrire
+            </Link>
+          </div>
         </div>
       </div>
 
-      
-      <div className="hidden md:flex items-center justify-center bg-white">
-        <img
-          src="/pablo-heimplatz-ZODcBkEohk8-unsplash.jpg"
+      {/* SECTION IMAGE */}
+      <div className="relative hidden md:block min-h-screen">
+        <Image
+          src="/images/omuv-6.jpg"
           alt="Login Illustration"
-          className="w-full h-screen object-cover"
+          fill
+          priority
+          className="object-cover"
         />
       </div>
     </div>

@@ -45,6 +45,11 @@ export function ProfileSection({
   const [origin, setOrigin] = useState("");
   const publicUrl = creator && origin ? `${origin}/creator/${creator.slug}` : null;
 
+
+  console.log("walletBalance", walletBalance);
+  console.log(typeof walletBalance, walletBalance);
+
+  console.log("creator", creator);
   useEffect(() => {
     setOrigin(window.location.origin);
   }, []);

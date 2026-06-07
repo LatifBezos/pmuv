@@ -5,6 +5,7 @@ import { getCreators } from "@/utils/supabase/queries";
 import SearchBox from "@/layout/components/searchbox";
 
 
+
 const SearchPage = async () => {
   const data = await getCreators();
 
